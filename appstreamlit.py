@@ -1,5 +1,35 @@
 import streamlit as st
 
+
+# Définir le CSS personnalisé pour le fond d'écran
+def set_bg_image(image_file):
+    with open(image_file, "rb") as image:
+        encoded_string = base64.b64encode(image.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/{"png" if image_file.endswith(".png") else "jpg"};base64,{encoded_string}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Importer la bibliothèque base64 pour encoder l'image
+import base64
+
+# Chemin vers votre image de fond
+image_file = "1223017.jpg"  # Remplacez par le chemin de votre image
+
+# Appliquer le fond d'écran
+set_bg_image(image_file)
+
+
 # Ajouter un titre
 st.title("BIKEWORLD - L'endroit où la roue tourne !")
 
@@ -24,6 +54,9 @@ if st.button("Cliquez ici"):
 # Ajouter un sélecteur
 option = st.selectbox("Choisissez une option", ["Option 1", "Option 2", "Option 3"])
 st.write(f"Vous avez choisi: {option}")
+
+#st.switch_page("2_Catalogue.py")
+
 
 # Utiliser st.navigation
 
