@@ -59,9 +59,9 @@ def afficher_sous_menu_vertical(sous_menu):
         else:
             if st.button(item):
                 if item == "Accueil":
-                        st.experimental_set_query_params(page="Accueil")
+                        st.query_params(page="Accueil")
                 elif item == "Produits":
-                        st.experimental_set_query_params(page="Produits")
+                        st.query_params(page="Produits")
 
 #Ajouter du CSS pour ajuster la largeur de la colonne principale
 st.markdown(
@@ -91,14 +91,21 @@ st.markdown("<h1 class='stTitle'>BIKEWORLD - L'endroit où la roue tourne !</h1>
 #st.write("### Menu")
 afficher_menu_horizontal(menu_bikeworld)
 
+cols = st.columns(3)  # Ajustez le nombre de colonnes selon le nombre de pages
 pages = [
-    st.Page("./accueil_vue.py", title="Accueil", default=True),
-    st.Page("./catalogue_vue.py", title="Catalogue",),
-    st.Page("./connexion_vue.py", title="Connexion"),
-    st.Page("./inscription_vue.py", title="Inscription"),
-    st.Page("./panier_vue.py", title="Panier"),
-    st.Page("./produit_vue.py", title="Vue Produit"),
-    st.Page("./profil_vue.py", title="Profil"),
+    ("Accueil", "pages/accueil.py"),
+    ("Produits", "pages/catalogue.py"),
+    ("Connexion", "pages/connexion.py"),
+    ("inscription", "pages/inscription.py"),
+    ("panier", "pages/panier.py"),
+    ("produit", "pages/produit.py"),
+    ("profil", "pages/profil.py")
 ]
+
+for idx, (title, page) in enumerate(pages):
+    with cols[idx]:
+        if st.button(title):
+            st.switch_page(page)
+
 pg = st.navigation(pages)
 pg.run()
