@@ -3,7 +3,7 @@ import streamlit as st
 
 menu_bikeworld = {
     "Accueil": {},
-    "Produits": {
+    "Catalogue": {
         "Vélo": {
             "VTT":{},
             "BMX":{},
@@ -25,6 +25,8 @@ menu_bikeworld = {
     "Mon Compte":{}
 }
 
+st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+
 # Fonction pour afficher le menu horizontalement
 def afficher_menu_horizontal(menu):
     cols = st.columns(len(menu))
@@ -35,7 +37,18 @@ def afficher_menu_horizontal(menu):
                     afficher_sous_menu_vertical(sous_menu)
             else:
                 if st.button(item):
-                    st.write(f"Vous avez sélectionné: {item}")
+                    if item == "Accueil":
+                            st.query_params(page="Accueil")
+                    elif item == "Catalogue":
+                            st.query_params(page="Catalogue")
+                    elif item == "Produits":
+                            st.query_params(page="Produits")
+                    elif item == "Produits":
+                            st.query_params(page="Produits")
+                    elif item == "Produits":
+                            st.query_params(page="Produits")
+                    elif item == "Produits":
+                            st.query_params(page="Produits")
 
 # Fonction pour afficher les sous-menus verticalement
 def afficher_sous_menu_vertical(sous_menu):
@@ -45,23 +58,27 @@ def afficher_sous_menu_vertical(sous_menu):
                 afficher_sous_menu_vertical(sous_sous_menu)
         else:
             if st.button(item):
-                st.write(f"Vous avez sélectionné: {item}")
+                if item == "Accueil":
+                        st.experimental_set_query_params(page="Accueil")
+                elif item == "Produits":
+                        st.experimental_set_query_params(page="Produits")
 
-# Ajouter du CSS pour ajuster la largeur de la colonne principale
+#Ajouter du CSS pour ajuster la largeur de la colonne principale
 st.markdown(
     """
-    <style>
-    .main > div {
-        max-width: 100%;
-        padding-left: 0;
-        padding-right: 0;
-    }
-    .stTitle {
-        width :100%;
-        text-align : center;
-        margin-bottom : 2rem;
-    }
-    </style>
+        <style>
+            .main > div {
+            max-width: 100%;
+            padding-left: 10rem;
+            padding-right: 10rem;
+        }
+        .stTitle {
+            width :100%;
+            text-align : center;
+            margin-bottom : 0;
+        }
+
+        </style>
     """,
     unsafe_allow_html=True
 )
@@ -71,7 +88,17 @@ st.markdown(
 st.markdown("<h1 class='stTitle'>BIKEWORLD - L'endroit où la roue tourne !</h1>", unsafe_allow_html=True)
 
 # Afficher le menu en haut
-st.write("### Menu")
+#st.write("### Menu")
 afficher_menu_horizontal(menu_bikeworld)
 
-
+pages = [
+    st.Page("./accueil_vue.py", title="Accueil", default=True),
+    st.Page("./catalogue_vue.py", title="Catalogue",),
+    st.Page("./connexion_vue.py", title="Connexion"),
+    st.Page("./inscription_vue.py", title="Inscription"),
+    st.Page("./panier_vue.py", title="Panier"),
+    st.Page("./produit_vue.py", title="Vue Produit"),
+    st.Page("./profil_vue.py", title="Profil"),
+]
+pg = st.navigation(pages)
+pg.run()
