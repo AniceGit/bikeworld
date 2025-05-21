@@ -8,7 +8,8 @@ class Utilisateur:
                  prenom: str,
                  email: str,
                  mdp: str,
-                 tel: str
+                 tel: str,
+                 adresse: Adresse
     ) -> None:
         """ Instanciation d'un Utilisateur
 
@@ -19,6 +20,7 @@ class Utilisateur:
             email (str): Email de l'utilisateur
             mdp (str): Mot de passe de l'utilisateur
             tel (str): Numero de telephone de l'utilisateur
+            adresse (Adresse): Adresse par defaut de l'utilisateur
         """
         self.id = id
         self.nom = nom
@@ -26,4 +28,4 @@ class Utilisateur:
         self.email = email
         self.mdp = mdp
         self.tel = tel
-        self.liste_adresse: list[Adresse] = []
+        self.liste_adresse: Adresse = adresse

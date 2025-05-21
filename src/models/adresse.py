@@ -1,14 +1,16 @@
 class Adresse:
-    def __init__(self, id: int,
-                 numero: int,
-                 type_voie: str,
-                 nom_voie: str,
-                 code_postal: int,
-                 ville: str,
-                 pays: str,
-                 id_utilisateur: int
+    def __init__(
+        self,
+        id: int,
+        numero: int,
+        type_voie: str,
+        nom_voie: str,
+        code_postal: int,
+        ville: str,
+        pays: str,
+        id_utilisateur: int,
     ) -> None:
-        """ Instanciation d'une Adresse
+        """Instanciation d'une Adresse
 
         Args:
             id (int): identifiant de l'adresse (pk)
