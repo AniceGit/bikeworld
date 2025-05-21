@@ -8,6 +8,7 @@ class Adresse:
         code_postal: str,
         ville: str,
         pays: str,
+        defaut: int,
         id_utilisateur: int,
     ) -> None:
         """Instanciation d'une Adresse
@@ -20,6 +21,7 @@ class Adresse:
             code_postal (str): Code postal
             ville (str): Ville
             pays (str): Pays
+            defaut (int): Adresse par défaut de l'utilisateur
             id_utilisateur (int): identifiant utilisateur (fk)
         """
         self.id = id
@@ -29,4 +31,5 @@ class Adresse:
         self.code_postal = code_postal
         self.ville = ville
         self.pays = pays
+        self.defaut = defaut
         self.id_utilisateur = id_utilisateur
