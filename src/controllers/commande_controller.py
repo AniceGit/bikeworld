@@ -11,9 +11,20 @@ def creer_commande(commande: Commande, lignes: list[ProduitCommande]) -> int | N
         # Insertion de la commande
         cur.execute("""
             INSERT INTO commandes (date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (commande.date_commande, commande.etat, commande.prix_total, commande.frais_livraison,
-              commande.id_utilisateur, commande.id_adresse))
+            VALUES (:date_commande,
+                    :etat,
+                    :prix_total,
+                    :frais_livraison,
+                    :id_utilisateur,
+                    :id_adresse)
+        """, {"date_commande": commande.date_commande,
+              "etat": commande.etat,
+              "prix_total": commande.prix_total,
+              "frais_livraison": commande.frais_livraison,
+              "id_utilisateur": commande.id_utilisateur,
+              "id_adresse": commande.id_adresse
+            }
+        )
 
         # retour de l'id créé
         cmd_id = cur.lastrowid
