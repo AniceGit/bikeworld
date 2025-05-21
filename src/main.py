@@ -1,10 +1,10 @@
 import streamlit as st
 
 from src.tools.session import init_session
-from src.vues.menu_vue import afficher_menu
-from src.vues.connexion_vue import connexion_vue
-from src.vues.inscription_vue import inscrire_vue
-from src.vues.accueil_vue import afficher_accueil
+from menu_vue import afficher_menu
+from src.pages.connexion import connexion_vue
+from src.pages.inscription import inscrire_vue
+from src.pages.accueil import afficher_accueil
 
 
 init_session()
