@@ -2,10 +2,10 @@ class Adresse:
     def __init__(
         self,
         id: int,
-        numero: int,
+        numero: str,
         type_voie: str,
         nom_voie: str,
-        code_postal: int,
+        code_postal: str,
         ville: str,
         pays: str,
         id_utilisateur: int,
@@ -14,10 +14,10 @@ class Adresse:
 
         Args:
             id (int): identifiant de l'adresse (pk)
-            numero (int): Numéro de rue
+            numero (str): Numéro de rue
             type_voie (str): Type de voie
             nom_voie (str): Nom de la voie
-            code_postal (int): Code postal
+            code_postal (str): Code postal
             ville (str): Ville
             pays (str): Pays
             id_utilisateur (int): identifiant utilisateur (fk)

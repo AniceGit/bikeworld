@@ -1,4 +1,4 @@
-from adresse import Adresse
+from src.models.adresse import Adresse
 
 class Utilisateur:
 
