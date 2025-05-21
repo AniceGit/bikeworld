@@ -29,3 +29,4 @@ class Produit():
         self.image = image
         self.prix = prix
         self.stock = stock
+
