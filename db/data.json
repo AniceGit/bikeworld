@@ -420,6 +420,14 @@
             "frais_livraison": 20.00,
             "id_utilisateur": 4,
             "id_adresse": 4
+        },
+        {
+            "date_commande": "2025-05-20",
+            "etat": "Validee",
+            "prix_total": 2997.00,
+            "frais_livraison": 0.00,
+            "id_utilisateur": 1,
+            "id_adresse": 1
         }
     ],
     "produit_commande": [
@@ -452,6 +460,18 @@
             "prix": 149.90,
             "id_produit": 7,
             "id_commande": 2
+        },
+                {
+            "quantite": 1,
+            "prix": 599.00,
+            "id_produit": 2,
+            "id_commande": 3
+        },
+        {
+            "quantite": 2,
+            "prix": 1199.00,
+            "id_produit": 12,
+            "id_commande": 3
         }
     ]
 }

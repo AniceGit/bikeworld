@@ -13,7 +13,7 @@ def afficher_sidebar():
         st.sidebar.text(f"👤 Connecté : {st.session_state["utilisateur"].prenom}")
         st.sidebar.page_link("pages/deconnexion.py", label="Se déconnecter")
 
-    st.sidebar.text('toto')
+    st.sidebar.text('SHOP')
     st.sidebar.page_link("pages/catalogue.py", label="Catalogue")
     st.sidebar.page_link("pages/panier.py", label="Panier")
 
