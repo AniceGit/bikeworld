@@ -78,6 +78,7 @@ def get_utilisateur_by_email(email) -> None:
         cur = conn.cur()
         cur.execute("SELECT * FROM utilisateurs WHERE email = ?", (email,))
         utilisateur = cur.fetchone()
+        
         return utilisateur
 
 

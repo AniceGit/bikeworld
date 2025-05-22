@@ -1,4 +1,4 @@
-from produit_commande import ProduitCommande
+# from produit_commande import ProduitCommande
 
 class Commande:
 
@@ -9,7 +9,7 @@ class Commande:
                  frais_livraison: float,
                  id_utilisateur: int,
                  id_adresse: int,
-                 liste_produit_commande: list[ProduitCommande]
+#                 liste_produit_commande: list[ProduitCommande]
     ) -> None:
         """ Instanciation d'une Commande
 
@@ -30,4 +30,4 @@ class Commande:
         self.frais_livraison = frais_livraison
         self.id_utilisateur = id_utilisateur
         self.id_adresse = id_adresse
-        self.liste_produit_commande = liste_produit_commande if liste_produit_commande else []
+#        self.liste_produit_commande = liste_produit_commande if liste_produit_commande else []
