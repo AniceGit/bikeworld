@@ -13,13 +13,18 @@ produit = get_details_produit(id)
 st.title(produit.nom)
 
 
-st.write(f"Description: {produit.description}")
-st.write(f"Spécifications Techniques: {produit.spec_tech}")
-st.write(f"Couleur: {produit.couleur}")
-st.write(f"Prix: {produit.prix}")
-st.write(f"Stock: {produit.stock}")
+st.write(f"<span style='font-size: 20px;'>**Description**</span>: {produit.description}",unsafe_allow_html=True)
+st.write(f"<span style='font-size: 20px;'>**Spécifications Techniques**</span>: {produit.spec_tech}",unsafe_allow_html=True)
+st.write(f"<span style='font-size: 20px;'>**Couleur**</span>: {produit.couleur}",unsafe_allow_html=True)
+st.write(f"<span style='font-size: 20px;'>**Prix**</span>: {produit.prix}",unsafe_allow_html=True)
+st.write(f"<span style='font-size: 20px;'>**Stock**</span>: {produit.stock}",unsafe_allow_html=True)
 if produit.image:
     st.image(produit.image, caption=produit.nom, use_container_width=True)
 else:
     st.write("Aucune image disponible")
+
+# Bouton pour ajouter au panier
+if st.button("Ajouter au panier", key=produit):
+    st.session_state.panier.append(produit)
+    st.success(f"{produit['nom']} a été ajouté au panier !")
 
