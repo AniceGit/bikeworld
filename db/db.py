@@ -99,7 +99,7 @@ def init_db(data) -> None:
             """
             CREATE TABLE IF NOT EXISTS commande (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                date TEXT NOT NULL,
+                date_commande TEXT NOT NULL,
                 etat TEXT NOT NULL,
                 prix_total REAL NOT NULL,
                 frais_livraison REAL NOT NULL,
@@ -176,8 +176,8 @@ def init_db(data) -> None:
 
         cur.executemany(
             """
-            INSERT INTO commande (date, etat, prix_total, frais_livraison, id_utilisateur, id_adresse)
-                VALUES (:date, :etat, :prix_total, :frais_livraison, :id_utilisateur, :id_adresse)
+            INSERT INTO commande (date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse)
+                VALUES (:date_commande, :etat, :prix_total, :frais_livraison, :id_utilisateur, :id_adresse)
             """,
             commandes,
         )

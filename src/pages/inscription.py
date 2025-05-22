@@ -1,8 +1,14 @@
 import streamlit as st
 from src.controllers.utilisateur_controller import inscrire_utilisateur
+from pages.sidebar import afficher_sidebar
+
+
+afficher_sidebar()
 
 st.title("Page de d'inscription")
 st.write("Bienvenue sur la page d'insciption de BIKEWORLD!")
+
+
 
 def inscrire_vue():
     st.header("Inscription")
