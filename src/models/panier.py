@@ -5,7 +5,7 @@ class Panier:
     def __init__(self,
                  date_panier: str,
                  prix_total: float,
-                 liste_produits_quantite: list[tuple[Produit, int]]
+                 liste_produits_quantite: list[dict]
     ) -> None:
         """ Instanciation d'un Panier
 
