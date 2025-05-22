@@ -1,8 +1,10 @@
 import streamlit as st
 import sqlite3
+from models.utilisateur import Utilisateur
+from models.adresse import Adresse
 
 #----création d'un nouvel utilisateur via une inscription----#
-def inscrire_utilisateur(nom, prenom, email, mdp, tel, adresse=None) -> None:
+def inscrire_utilisateur(nom, prenom, email, password, telephone) -> bool:
     """
     Permet d'inscrire un nouvel utilisateur. Vérifie si l'email existe déjà dans la base de données,
     et crée un utilisateur si l'email est disponible.
@@ -11,57 +13,59 @@ def inscrire_utilisateur(nom, prenom, email, mdp, tel, adresse=None) -> None:
     nom (str): Le nom de l'utilisateur.
     prenom (str): Le prénom de l'utilisateur.
     email (str): L'email de l'utilisateur (doit être unique).
-    mdp (str): Le mot de passe de l'utilisateur.
-    tel (str): Le numéro de téléphone de l'utilisateur.
-    adresse (str, optionnel): L'adresse de l'utilisateur (par défaut à None).
+    password (str): Le mot de passe de l'utilisateur.
+    telephone (str): Le numéro de téléphone de l'utilisateur.
 
     Affiche un message de succès ou d'erreur via Streamlit.
     """
     utilisateur = get_utilisateur_by_email(email)
     if utilisateur:
         st.error("Cet email est déjà utilisé.")
+        return False
     else:
-        creer_utilisateur(nom, prenom, email, mdp, tel, adresse)
+        creer_utilisateur(nom, prenom, email, password, telephone)
         st.success("Inscription réussie. Vous pouvez maintenant vous connecter.")
+        return True
 
-def creer_utilisateur(nom, prenom, email, mdp, tel, adresse) -> None:
+def creer_utilisateur(nom, prenom, email, password, telephone) -> None:
     """
-    Crée un utilisateur dans la base de données SQLite en insérant ses informations dans la table 'utilisateurs'.
+    Crée un utilisateur dans la base de données SQLite en insérant ses informations dans la table 'utilisateur'.
 
     Paramètres:
     nom (str): Le nom de l'utilisateur.
     prenom (str): Le prénom de l'utilisateur.
     email (str): L'email de l'utilisateur.
-    mdp (str): Le mot de passe de l'utilisateur.
-    tel (str): Le numéro de téléphone de l'utilisateur.
-    adresse (str): L'adresse de l'utilisateur (peut être None).
+    password (str): Le mot de passe de l'utilisateur.
+    telephone (str): Le numéro de téléphone de l'utilisateur.
     """
     with sqlite3.connect("bikeworld.db") as conn:
-        cur = conn.cur()
+        cur = conn.cursor()
         cur.execute('''
-            INSERT INTO utilisateurs (nom, prenom, email, mdp, tel, adresse)
-            VALUES (:nom, :prenom, :email, :mdp, :tel, :adresse)
-        ''', {'nom' : nom, 'prenom' : prenom, 'email' : email, 'mdp' : mdp, 'tel' : tel, 'adresse' : adresse})
+            INSERT INTO utilisateur (nom, prenom, email, password, telephone)
+            VALUES (:nom, :prenom, :email, :password, :telephone)
+        ''', {'nom' : nom, 'prenom' : prenom, 'email' : email, 'password' : password, 'telephone' : telephone})
 
 
-#----connexion d'un utilisateur avec utilisation d'un get-email pour vérifier si cet utilisateur existe et s'il a ce mdp----#
-def connecter_utilisateur(email, mdp) -> None:
+#----connexion d'un utilisateur avec utilisation d'un get-email pour vérifier si cet utilisateur existe et s'il a ce password----#
+def connecter_utilisateur(email, password) -> bool:
     """
     Permet de connecter un utilisateur en vérifiant ses identifiants (email et mot de passe).
 
     Paramètres:
     email (str): L'email de l'utilisateur.
-    mdp (str): Le mot de passe de l'utilisateur.
+    password (str): Le mot de passe de l'utilisateur.
 
     Affiche un message de succès ou d'erreur via Streamlit. Si les identifiants sont valides, 
     l'utilisateur est enregistré dans la session.
     """
-    utilisateur = get_utilisateur_by_email(email)
-    if utilisateur and utilisateur[4] == mdp:
+    utilisateur:Utilisateur = get_utilisateur_by_email(email)
+    if utilisateur and utilisateur.password == password:
         st.session_state["utilisateur"] = utilisateur
-        st.success(f"Bienvenue, {utilisateur[2]} !")
+        st.success(f"Bienvenue, {utilisateur.prenom} !")
+        return True
     else:
         st.error("Identifiants incorrects.")
+        return False
 
 def get_utilisateur_by_email(email) -> None:
     """
@@ -75,16 +79,23 @@ def get_utilisateur_by_email(email) -> None:
            ou None si aucun utilisateur n'est trouvé avec cet email.
     """
     with sqlite3.connect("bikeworld.db") as conn:
-        cur = conn.cur()
-        cur.execute("SELECT * FROM utilisateurs WHERE email = ?", (email,))
-        utilisateur = cur.fetchone()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM utilisateur WHERE email = :email", {'email':email})
+        result_utilisateur = cur.fetchone()
+        if result_utilisateur:
+            utilisateur:Utilisateur = Utilisateur(result_utilisateur[0], result_utilisateur[1], result_utilisateur[2], result_utilisateur[3], result_utilisateur[4], result_utilisateur[5])
         
-        return utilisateur
-
+            cur.execute("SELECT * FROM adresse WHERE id_utilisateur = :id_utilisateur AND defaut= :defaut", {'id_utilisateur':utilisateur.id, 'defaut':1})
+            result_adresse = cur.fetchone()
+            if result_adresse:
+                adresse:Adresse = Adresse(result_adresse[0], result_adresse[1], result_adresse[2], result_adresse[3], result_adresse[4], result_adresse[5], result_adresse[6], result_adresse[7], result_adresse[8])
+                utilisateur.adresse = adresse
+            return utilisateur
+        return None
 
 #-----déconnexion de l'utilisateur-----#
-def deconnecter_utilisateur() -> None:
-    if "utilisateur" in st.session_state :
-        prenom = st.session_state["utilisateur"][1]
+def deconnecter_utilisateur() -> str:
+    if "utilisateur" in st.session_state and st.session_state["utilisateur"] is not None :
+        prenom = st.session_state["utilisateur"].prenom
         st.session_state["utilisateur"] = None
-        st.success(f"Aurevoir, {prenom} !")
+    return prenom
