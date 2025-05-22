@@ -406,7 +406,7 @@
     ],
     "commande": [
         {
-            "date": "2025-04-15",
+            "date_commande": "2025-04-15",
             "etat": "Expediee",
             "prix_total": 1798.00,
             "frais_livraison": 0.00,
@@ -414,9 +414,9 @@
             "id_adresse": 8
         },
         {
-            "date": "2025-05-21",
+            "date_commande": "2025-05-21",
             "etat": "Validee",
-            "prix_total": 1299.99,
+            "prix_total": 2207.89,
             "frais_livraison": 20.00,
             "id_utilisateur": 4,
             "id_adresse": 4
@@ -439,6 +439,18 @@
             "quantite": 1,
             "prix": 1299.99,
             "id_produit": 4,
+            "id_commande": 2
+        },
+        {
+            "quantite": 2,
+            "prix": 379.00,
+            "id_produit": 5,
+            "id_commande": 2
+        },
+        {
+            "quantite": 1,
+            "prix": 149.90,
+            "id_produit": 7,
             "id_commande": 2
         }
     ]
