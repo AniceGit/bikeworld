@@ -171,9 +171,8 @@ def get_commandes(id_utilisateur: int) -> list[Commande]:
 
             for id_produit_commande, quantite, prix, id_produit, id_commande in result_lignes:
                 lignes.append(ProduitCommande(id=id_produit_commande, quantite=quantite, prix=prix, id_produit=id_produit, id_commande=id_commande))
-
-            commandes.append(
-                Commande(
+            
+            ma_commande = Commande(
                     id=id_commande,
                     date_commande=date_commande,
                     etat=etat,
@@ -181,9 +180,9 @@ def get_commandes(id_utilisateur: int) -> list[Commande]:
                     frais_livraison=frais_livrason,
                     id_utilisateur=id_utilisateur,
                     id_adresse=id_adresse,
-                    liste_produit_commande=lignes,
-                )
             )
+            ma_commande.liste_produit_commande = lignes
+            commandes.append(ma_commande)
 
     return commandes
 

@@ -8,8 +8,7 @@ class Commande:
                  prix_total: float,
                  frais_livraison: float,
                  id_utilisateur: int,
-                 id_adresse: int,
-                 liste_produit_commande: list[ProduitCommande]
+                 id_adresse: int
     ) -> None:
         """ Instanciation d'une Commande
 
@@ -30,4 +29,4 @@ class Commande:
         self.frais_livraison = frais_livraison
         self.id_utilisateur = id_utilisateur
         self.id_adresse = id_adresse
-        self.liste_produit_commande = liste_produit_commande if liste_produit_commande else []
+        self.liste_produit_commande = None

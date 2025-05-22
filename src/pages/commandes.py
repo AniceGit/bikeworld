@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import time
 from src.tools.session import init_session
 from pages.sidebar import afficher_sidebar
 from controllers.commande_controller import supprimer_commande, get_commandes, get_adresse_commande
@@ -53,4 +54,5 @@ if selected_id:
             if st.button(f"🗑️ Supprimer la commande {cmd.id}", key=f"delete_{cmd.id}"):
                 supprimer_commande(cmd.id)
                 st.success(f"Commande {cmd.id} supprimée.")
-                st.experimental_rerun()
+                time.sleep(2)
+                st.switch_page("pages/commandes.py")
