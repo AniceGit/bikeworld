@@ -1,11 +1,12 @@
 import sqlite3
-from models.commande import Commande
-from models.produit_commande import ProduitCommande
+from src.models.commande import Commande
+from src.models.adresse import Adresse
+from src.models.produit_commande import ProduitCommande
 
 
 # def creer_commande(commande: Commande, lignes: list[ProduitCommande]) -> int | None:
 
-#     with sqlite3.connect("bikeworld.db") as conn:
+#     with sqlite3.connect("bikeworld.db") as conn:3+
 #         cur = conn.cursor()
 
 #         # Insertion de la commande
@@ -47,7 +48,8 @@ def supprimer_commande(id_commande: int) -> int | None:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
-        cur.execute(""" \
+        cur.execute(
+            """ \
                 SELECT id,
                     date_commande,
                     etat,
@@ -56,50 +58,63 @@ def supprimer_commande(id_commande: int) -> int | None:
                     id_utilisateur,
                     id_adresse
                 FROM commande WHERE id = :id_commande
-            """, { "id_commande": id_commande }
+            """,
+            {"id_commande": id_commande},
         )
 
         result = cur.fetchone()
 
         if result is None:
             raise Exception(f"Commande {id_commande} introuvable.")
-        
-        commande = Commande(result[0], result[1], result[2], result[3], result[4], result[5], result[6])
+
+        commande = Commande(
+            result[0], result[1], result[2], result[3], result[4], result[5], result[6]
+        )
 
         if commande.etat == "Validee":
             # Suppression des lignes (produit_commande) de la commande
-            cur.execute("""
+            cur.execute(
+                """
                 DELETE FROM produit_commande WHERE id_commande = :id_commande
-            """, { "id_commande": id_commande }
+            """,
+                {"id_commande": id_commande},
             )
 
-            cur.execute("""
+            cur.execute(
+                """
                 DELETE FROM commande WHERE id = :id
-            """, { "id": id_commande }
+            """,
+                {"id": id_commande},
             )
         else:
             print("etat ne permet pas la suppression")
 
 
 def calculer_total_commande(id_commande: int) -> float:
-    
+
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
         # Récupération des lignes de produits pour la commande
-        cur.execute("""
+        cur.execute(
+            """
             SELECT quantite, prix FROM commande_produit
             WHERE id_commande = ?
-        """, (id_commande,))
+        """,
+            (id_commande,),
+        )
         lignes = cur.fetchall()
 
         total_produits = sum(quantite * prix for quantite, prix in lignes)
 
         # Récupération des frais de livraison
-        cur.execute("""
+        cur.execute(
+            """
             SELECT frais_livraison FROM commande
             WHERE id = ?
-        """, (id_commande,))
+        """,
+            (id_commande,),
+        )
         result = cur.fetchone()
         if result is None:
             raise Exception(f"Commande {id_commande} introuvable.")
@@ -118,38 +133,90 @@ def get_commandes(id_utilisateur: int) -> list[Commande]:
         cur = conn.cursor()
 
         # Récupération des commandes du client
-        cur.execute("""
+        cur.execute(
+            """
             SELECT id, date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse
             FROM commande
             WHERE id_utilisateur = :id_utilisateur
-        """, { "id_utilisateur": id_utilisateur }
+        """,
+            {"id_utilisateur": id_utilisateur},
         )
         entetes = cur.fetchall()
 
         commandes = []
 
-        for id_commande, date_commande, etat, prix_total, frais_livrason, id_utilisateur, id_adresse in entetes:
+        for (
+            id_commande,
+            date_commande,
+            etat,
+            prix_total,
+            frais_livrason,
+            id_utilisateur,
+            id_adresse,
+        ) in entetes:
 
             # Récupération des lignes de commande de chaque commande
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT id, quantite, prix, id_produit, id_commande
                 FROM produit_commande
                 WHERE id_commande = :id_commande
-            """, { "id_commande": id_commande }
+            """,
+                {"id_commande": id_commande},
             )
             result_lignes = cur.fetchall()
 
-            lignes = [ProduitCommande(id_produit_commande, quantite, prix, id_produit, id_commande) for id_produit_commande, quantite, prix, id_produit, id_commande in result_lignes]
+            lignes = []
 
-            commandes.append(Commande(id=id_commande, 
-                                      date_commande=date_commande,
-                                      etat=etat,
-                                      prix_total=prix_total,
-                                      frais_livraison=frais_livrason,
-                                      id_utilisateur=id_utilisateur,
-                                      id_adresse=id_adresse,
-                                      liste_produit_commande=lignes
-                                      )
+            for id_produit_commande, quantite, prix, id_produit, id_commande in result_lignes:
+                lignes.append(ProduitCommande(id=id_produit_commande, quantite=quantite, prix=prix, id_produit=id_produit, id_commande=id_commande))
+
+            commandes.append(
+                Commande(
+                    id=id_commande,
+                    date_commande=date_commande,
+                    etat=etat,
+                    prix_total=prix_total,
+                    frais_livraison=frais_livrason,
+                    id_utilisateur=id_utilisateur,
+                    id_adresse=id_adresse,
+                    liste_produit_commande=lignes,
+                )
             )
 
     return commandes
+
+
+def get_adresse_commande(id_adresse: int) -> Adresse | None:
+
+    adresse_commande = None    
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+
+        cur.execute(
+            """
+                SELECT id,
+                    numero,
+                    type_voie,
+                    nom_voie,
+                    code_postal,
+                    ville,
+                    pays,
+                    defaut,
+                    id_utilisateur
+                FROM adresse WHERE id = :id_adresse
+            """,
+            {"id_adresse": id_adresse},
+        )
+
+        result = cur.fetchone()
+
+        if result is None:
+            raise Exception(f"Adresse de la commande {id_adresse} introuvable.")
+
+
+        adresse_commande = Adresse(
+            result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8]
+        )
+
+    return adresse_commande
