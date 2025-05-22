@@ -30,7 +30,7 @@ def get_produits():
                 lignes.append(Produit(id, nom, desc, spec_tech, couleur, image, prix, stock)) 
             return lignes
     
-st.title("Liste des Produits")
+#st.title("Liste des Produits")
 
 def get_details_produit(id_produit):
     with sqlite3.connect("bikeworld.db") as conn:

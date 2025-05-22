@@ -7,3 +7,4 @@ def init_session():
         st.session_state["utilisateur"] = ("Dujardin", "Jean", "test@email.com", "mymdp", "0684452195", "adresse")
 
     st.session_state["produit"] = None
+    st.session_state["panier"] = None

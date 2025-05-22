@@ -6,16 +6,13 @@ from controllers.produit_controller import get_details_produit
 
 
 afficher_sidebar()
-
-st.title("Connexion")
-st.write("Bienvenue sur la page de connexion de BIKEWORLD!")
-
-
 id= st.session_state["produit"].id
 produit = get_details_produit(id)
 
 
-st.title(f"Détails du Produit: {produit.nom}")
+st.title(produit.nom)
+
+
 st.write(f"Description: {produit.description}")
 st.write(f"Spécifications Techniques: {produit.spec_tech}")
 st.write(f"Couleur: {produit.couleur}")
