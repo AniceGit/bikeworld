@@ -2,26 +2,47 @@ import streamlit as st
 from pages.sidebar import afficher_sidebar
 from tools.session import init_session
 
+def set_bg_image(image_file):
+    with open(image_file, "rb") as image:
+        encoded_string = base64.b64encode(image.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/{"png" if image_file.endswith(".png") else "jpg"};base64,{encoded_string}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Importer la bibliothèque base64 pour encoder l'image
+import base64
+
+# Chemin vers votre image de fond
+image_file = "images/1223017.jpg"  # Remplacez par le chemin de votre image
+
+# Appliquer le fond d'écran
+set_bg_image(image_file)
+
+
 # Configuration de la page
-st.set_page_config(page_title="BIKEWORLD", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
-
-# Fonction pour injecter le CSS
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-# Appeler la fonction pour injecter le CSS
-local_css("style.css")
+#st.set_page_config(page_title="BIKEWORLD", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 def afficher_accueil():
 
     init_session()
     afficher_sidebar()
 
-    st.title("Page d'Accueil")
-    st.write("Bienvenue sur la page d'accueil de BIKEWORLD!")
+    st.title("BIKEWORLD!")
+    st.write("The ways of Bithume")
 
     if st.button("Voir mes commandes"):
         st.switch_page("pages/commandes.py")
+
 
 afficher_accueil()
