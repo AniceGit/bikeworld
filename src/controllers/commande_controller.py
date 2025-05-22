@@ -1,4 +1,5 @@
 import sqlite3
+import streamlit as st
 from src.models.commande import Commande
 from src.models.adresse import Adresse
 from src.models.produit_commande import ProduitCommande
@@ -220,3 +221,7 @@ def get_adresse_commande(id_adresse: int) -> Adresse | None:
         )
 
     return adresse_commande
+
+
+def transformer_panier():
+    pass

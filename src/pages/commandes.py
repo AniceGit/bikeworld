@@ -1,15 +1,18 @@
 import streamlit as st
 import pandas as pd
+from src.tools.session import init_session
 from pages.sidebar import afficher_sidebar
 from controllers.commande_controller import supprimer_commande, get_commandes, get_adresse_commande
 
 
-afficher_sidebar()
-st.title("Commandes")
-st.write("Bienvenue sur la page de commandes de BIKEWORLD!")
+init_session()
+if not st.session_state["utilisateur"]:
+    st.switch_page("pages/connexion.py")
 
-#TODO récupérer l'id de l'utilisateur connecté
-commandes = get_commandes(1)
+afficher_sidebar()
+st.title("Vos commandes")
+
+commandes = get_commandes(st.session_state["utilisateur"].id)
 
 data = []
 
