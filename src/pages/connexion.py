@@ -20,13 +20,13 @@ def set_bg_image(image_file):
             background-attachment: fixed;
         }}
         .custom-title {{
-            color: #000000;  
+            color: #FFFFFF;  
         }}
         .custom-write {{
-            color: #000000; 
+            color: #FFFFFF; 
         }}
         .stTextInput>div>div>label {{
-            color: #000000;
+            color: #FFFFFF;
         }}
         </style>
         """,
@@ -34,7 +34,7 @@ def set_bg_image(image_file):
     )
 
 # Chemin vers votre image de fond
-image_file = "images/333354.jpg"  # Remplacez par le chemin de votre image
+image_file = "images/fond_velo_noir.jpg"  # Remplacez par le chemin de votre image
 
 # Appliquer le fond d'écran
 set_bg_image(image_file)

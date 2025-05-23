@@ -28,7 +28,7 @@ def set_bg_image(image_file):
     )
 
 # Chemin vers votre image de fond
-image_file = "images/1223017.jpg"  # Remplacez par le chemin de votre image
+image_file = "images/333497.jpg"  # Remplacez par le chemin de votre image
 
 # Appliquer le fond d'écran
 set_bg_image(image_file)
