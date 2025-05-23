@@ -15,3 +15,4 @@ st.write(f"Email : {utilisateur.email}")
 st.write(f"Téléphone : {utilisateur.telephone}")
 st.write(f"Adresse : {adresse.numero} {adresse.type_voie} {adresse.nom_voie} - {adresse.code_postal} {adresse.ville} - {adresse.pays}")
 
+
