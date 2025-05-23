@@ -9,7 +9,8 @@ def afficher_sidebar():
         st.sidebar.page_link("pages/connexion.py", label="⏻ Se connecter")
         st.sidebar.page_link("pages/inscription.py", label="S'inscrire")
     else :
-        st.sidebar.text(f"👤 Connecté : {st.session_state["utilisateur"].prenom}")
+        st.sidebar.text(f"Connecté : {st.session_state["utilisateur"].prenom}")
+        st.sidebar.page_link("pages/profil.py", label="👤 Profil")
         st.sidebar.page_link("pages/commandes.py", label="📦 Mes commandes")
         st.sidebar.page_link("pages/deconnexion.py", label="⏻ Se déconnecter")
 
