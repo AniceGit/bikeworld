@@ -33,3 +33,29 @@ class Adresse:
         self.pays = pays
         self.defaut = defaut
         self.id_utilisateur = id_utilisateur
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "numero": self.numero,
+            "type_voie": self.type_voie,
+            "nom_voie": self.nom_voie,
+            "code_postal": self.code_postal,
+            "ville": self.ville,
+            "pays": self.pays,
+            "defaut": self.defaut,
+            "id_utilisateur": self.id_utilisateur
+        }
+
+def adresse_from_dict(data):
+    return Adresse(
+        id=data["id"],
+        numero=data["numero"],
+        type_voie=data["type_voie"],
+        nom_voie=data["nom_voie"],
+        code_postal=data["code_postal"],
+        ville=data["ville"],
+        pays=data["pays"],
+        defaut=data["defaut"],
+        id_utilisateur=data["id_utilisateur"]
+    )

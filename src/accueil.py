@@ -1,6 +1,7 @@
 import streamlit as st
 from pages.sidebar import afficher_sidebar
 from tools.session import init_session
+import base64
 
 def set_bg_image(image_file):
     with open(image_file, "rb") as image:
@@ -26,21 +27,16 @@ def set_bg_image(image_file):
         unsafe_allow_html=True
     )
 
-# Importer la bibliothèque base64 pour encoder l'image
-import base64
-
 # Chemin vers votre image de fond
 image_file = "images/1223017.jpg"  # Remplacez par le chemin de votre image
 
 # Appliquer le fond d'écran
 set_bg_image(image_file)
 
-
 # Configuration de la page
 #st.set_page_config(page_title="BIKEWORLD", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 def afficher_accueil():
-
     init_session()
     afficher_sidebar()
 

@@ -1,5 +1,6 @@
 import streamlit as st
 import sqlite3
+import json, os
 from models.utilisateur import Utilisateur
 from models.adresse import Adresse
 
@@ -62,6 +63,7 @@ def connecter_utilisateur(email, password) -> bool:
     if utilisateur and utilisateur.password == password:
         st.session_state["utilisateur"] = utilisateur
         st.success(f"Bienvenue, {utilisateur.prenom} !")
+        sauvegarder_json_utilisateur(utilisateur)
         return True
     else:
         st.error("Identifiants incorrects.")
@@ -98,4 +100,18 @@ def deconnecter_utilisateur() -> str:
     if "utilisateur" in st.session_state and st.session_state["utilisateur"] is not None :
         prenom = st.session_state["utilisateur"].prenom
         st.session_state["utilisateur"] = None
+        if os.path.exists("db/utilisateur_session.json"):
+            supprimer_json_utilisateur()
     return prenom
+
+#-----sauvegarde de l'utilisateur connecté dans un json-----#
+def sauvegarder_json_utilisateur(utilisateur:Utilisateur):
+    try:
+        with open("db/utilisateur_session.json", "w") as f:
+            json.dump(utilisateur.to_dict(), f)
+    except Exception as e:
+        st.error("Erreur de sauvegarde de session : " + str(e))
+
+#-----supprimer le json utilisateur qui sert à session-----#
+def supprimer_json_utilisateur():
+    os.remove("db/utilisateur_session.json")
