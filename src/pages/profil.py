@@ -31,7 +31,7 @@ if "email_key" not in st.session_state or st.session_state.email_key == "":
 if "telephone_key" not in st.session_state or st.session_state.telephone_key == "":
     st.session_state.telephone_key = utilisateur.telephone
 
-#Input (on les vide au changement de page)
+#Input
 nom = st.text_input("Nom", key="nom_key")
 prenom = st.text_input("Prénom", key="prenom_key")
 email = st.text_input("Email", key="email_key")
@@ -76,3 +76,6 @@ if st.button("Modifier",disabled=button_disabled):
     st.session_state["utilisateur"] = nouvel_utilisateur
     sauvegarder_json_utilisateur(nouvel_utilisateur)
     st.switch_page("pages/profil.py")
+
+if st.button("Ajouter une adresse"):
+    st.switch_page("pages/adresse.py")

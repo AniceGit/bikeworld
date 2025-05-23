@@ -108,6 +108,16 @@ def get_adresses_utilisateur(id:int):
         for id, numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur in result_adresses:
                 adresses.append(Adresse(id, numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur)) 
         return adresses
+    
+def creer_adresse(numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur) -> bool:
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+        cur.execute('''
+            INSERT INTO adresse (numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur)
+            VALUES (:numero, :type_voie, :nom_voie, :code_postal, :ville, :pays, :defaut, :id_utilisateur)
+        ''', {'numero' : numero, 'type_voie' : type_voie, 'nom_voie' : nom_voie, 'code_postal' : code_postal, 'ville' : ville, 'pays' : pays, 'defaut' : defaut, 'id_utilisateur' : id_utilisateur})
+        st.success("Nouvelle adresse créée avec succès !")
+        return True
 
 #-----Modifier adresse-----#
 def modifier_adresse_utilisateur(nouvelle_adresse:Adresse):
