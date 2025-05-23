@@ -51,7 +51,7 @@ for i, produit in enumerate(liste_produits):
         
         if produit.image:
             st.image(produit.image, caption=produit.nom, use_container_width=True)
-            st.write(f"Prix: {produit.prix}")
+            st.write(f"Prix: {produit.prix:.2f}")
             if st.button("DETAIL", key=produit.id):
                 st.session_state["produit"]=produit
                 st.switch_page("pages/produit.py")

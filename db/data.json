@@ -278,7 +278,7 @@
             "stock": 6
         },
         {
-            "nom": "Vélo pour enfants KidZoom 14",
+            "nom": "Vélo pour enfants KidZoom",
             "desc": "Vélo adapté aux enfants de 4 à 6 ans.",
             "spec_tech": "Roues 14 pouces, stabilisateurs amovibles.",
             "couleur": "rose",
@@ -305,7 +305,7 @@
             "stock": 8
         },
         {
-            "nom": "Vélo trekking Adventure 700",
+            "nom": "Vélo trekking Adventure",
             "desc": "Pour les longues randonnées sur route ou chemin.",
             "spec_tech": "Cadre renforcé, pneus larges, garde-boue.",
             "couleur": "marron",
@@ -359,7 +359,7 @@
             "stock": 6
         },
         {
-            "nom": "Vélo électrique Speedster E500",
+            "nom": "Vélo électrique Speedster",
             "desc": "Pour des trajets rapides avec assistance électrique.",
             "spec_tech": "Moteur 500W, batterie 48V, autonomie 80 km.",
             "couleur": "argent",
