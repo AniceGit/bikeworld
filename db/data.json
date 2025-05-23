@@ -230,7 +230,8 @@
             "couleur": "rouge",
             "image": "images/velo1.jpg",
             "prix": 749.99,
-            "stock": 5
+            "stock": 5,
+            "ventes": 0
         },
         {
             "nom": "VTT RockTrail 500",
@@ -239,7 +240,8 @@
             "couleur": "noir",
             "image": "images/velo2.jpg",
             "prix": 599.00,
-            "stock": 3
+            "stock": 3,
+            "ventes": 2
         },
         {
             "nom": "Vélo de ville UrbanRide",
@@ -248,7 +250,8 @@
             "couleur": "gris",
             "image": "images/velo3.jpg",
             "prix": 459.50,
-            "stock": 12
+            "stock": 12,
+            "ventes": 0
         },
         {
             "nom": "Vélo électrique E-Move 250",
@@ -257,7 +260,8 @@
             "couleur": "bleu",
             "image": "images/velo4.jpg",
             "prix": 1299.99,
-            "stock": 4
+            "stock": 4,
+            "ventes": 1
         },
         {
             "nom": "Vélo pliant Compact Fold",
@@ -266,7 +270,8 @@
             "couleur": "vert",
             "image": "images/velo5.jpg",
             "prix": 379.00,
-            "stock": 10
+            "stock": 10,
+            "ventes": 2
         },
         {
             "nom": "VTT TrailBlazer X7",
@@ -275,16 +280,18 @@
             "couleur": "orange",
             "image": "images/velo6.jpg",
             "prix": 899.99,
-            "stock": 6
+            "stock": 6,
+            "ventes": 0
         },
         {
-            "nom": "Vélo pour enfants KidZoom 14",
+            "nom": "Vélo pour enfants KidZoom",
             "desc": "Vélo adapté aux enfants de 4 à 6 ans.",
             "spec_tech": "Roues 14 pouces, stabilisateurs amovibles.",
             "couleur": "rose",
             "image": "images/velo7.jpg",
             "prix": 149.90,
-            "stock": 15
+            "stock": 15,
+            "ventes": 1
         },
         {
             "nom": "Cruiser BeachTime",
@@ -293,7 +300,8 @@
             "couleur": "turquoise",
             "image": "images/velo8.jpg",
             "prix": 329.00,
-            "stock": 7
+            "stock": 7,
+            "ventes": 0
         },
         {
             "nom": "Fixie StreetRider",
@@ -302,16 +310,18 @@
             "couleur": "jaune",
             "image": "images/velo9.jpg",
             "prix": 299.90,
-            "stock": 8
+            "stock": 8,
+            "ventes": 0
         },
         {
-            "nom": "Vélo trekking Adventure 700",
+            "nom": "Vélo trekking Adventure",
             "desc": "Pour les longues randonnées sur route ou chemin.",
             "spec_tech": "Cadre renforcé, pneus larges, garde-boue.",
             "couleur": "marron",
             "image": "images/velo10.jpg",
             "prix": 689.00,
-            "stock": 2
+            "stock": 2,
+            "ventes": 0
         },
         {
             "nom": "Vélo fitness SpeedFit",
@@ -320,7 +330,8 @@
             "couleur": "blanc",
             "image": "images/velo11.jpg",
             "prix": 549.00,
-            "stock": 9
+            "stock": 9,
+            "ventes": 0
         },
         {
             "nom": "Vélo gravel TerraRide",
@@ -329,7 +340,8 @@
             "couleur": "bordeaux",
             "image": "images/velo12.jpg",
             "prix": 1199.00,
-            "stock": 3
+            "stock": 3,
+            "ventes": 3
         },
         {
             "nom": "VTT junior TrailKid 20",
@@ -338,7 +350,8 @@
             "couleur": "bleu",
             "image": "images/velo13.jpg",
             "prix": 229.00,
-            "stock": 11
+            "stock": 11,
+            "ventes": 0
         },
         {
             "nom": "Vélo cargo FamilyBike",
@@ -347,7 +360,8 @@
             "couleur": "noir",
             "image": "images/velo14.jpg",
             "prix": 1599.00,
-            "stock": 1
+            "stock": 1,
+            "ventes": 0
         },
         {
             "nom": "Vélo vintage RetroStyle",
@@ -356,16 +370,18 @@
             "couleur": "crème",
             "image": "images/velo15.jpg",
             "prix": 499.00,
-            "stock": 6
+            "stock": 6,
+            "ventes": 0
         },
         {
-            "nom": "Vélo électrique Speedster E500",
+            "nom": "Vélo électrique Speedster",
             "desc": "Pour des trajets rapides avec assistance électrique.",
             "spec_tech": "Moteur 500W, batterie 48V, autonomie 80 km.",
             "couleur": "argent",
             "image": "images/velo16.jpg",
             "prix": 1790.00,
-            "stock": 5
+            "stock": 5,
+            "ventes": 0
         },
         {
             "nom": "Vélo gravel léger AllRoad GX",
@@ -374,7 +390,8 @@
             "couleur": "gris mat",
             "image": "images/velo17.jpg",
             "prix": 2099.00,
-            "stock": 3
+            "stock": 3,
+            "ventes": 0
         },
         {
             "nom": "Vélo cargo électrique UrbanHauler",
@@ -383,7 +400,8 @@
             "couleur": "vert foncé",
             "image": "images/velo18.jpg",
             "prix": 3590.00,
-            "stock": 2
+            "stock": 2,
+            "ventes": 0
         },
         {
             "nom": "VTT électrique E-Trail 800",
@@ -392,7 +410,8 @@
             "couleur": "noir et rouge",
             "image": "images/velo19.jpg",
             "prix": 2899.00,
-            "stock": 4
+            "stock": 4,
+            "ventes": 0
         },
         {
             "nom": "Vélo urbain connecté SmartRide",
@@ -401,7 +420,8 @@
             "couleur": "bleu nuit",
             "image": "images/velo20.jpg",
             "prix": 1390.00,
-            "stock": 7
+            "stock": 7,
+            "ventes": 0
         }
     ],
     "commande": [

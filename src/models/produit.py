@@ -7,7 +7,8 @@ class Produit():
                  couleur: str,
                  image: str,
                  prix: float,
-                 stock: int
+                 stock: int,
+                 ventes: int
     ) -> None:
         """ Instanciation d'un Produit
 
@@ -20,6 +21,7 @@ class Produit():
             image (str): URI de l'image du produit
             prix (float): prix unitaire du produit
             stock (int): Stock disponible du produit
+            ventes (int): Nombre de ventes totales du produit
         """
         self.id = id
         self.nom = nom
@@ -29,4 +31,4 @@ class Produit():
         self.image = image
         self.prix = prix
         self.stock = stock
-
+        self.ventes = ventes

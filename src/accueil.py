@@ -29,23 +29,19 @@ def set_bg_image(image_file):
     )
 
 # Chemin vers votre image de fond
-image_file = "images/333497.jpg"  # Remplacez par le chemin de votre image
+image_file = "images/accueil_background.jpg"  # Remplacez par le chemin de votre image
 
 # Appliquer le fond d'écran
 set_bg_image(image_file)
 
-# Configuration de la page
-#st.set_page_config(page_title="BIKEWORLD", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+
+
 
 def afficher_accueil():
     init_session()
     afficher_sidebar()
 
-    st.markdown('<h1 class="custom-title">BIKEWORLD</h1>',unsafe_allow_html=True)
-    st.write("The ways of Bithume")
-
     afficher_produits_stars()
-    st.title("Page d'Accueil")
-    st.write("Bienvenue sur la page d'accueil de BIKEWORLD!")
+
 
 afficher_accueil()

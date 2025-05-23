@@ -3,7 +3,7 @@ import pandas as pd
 from pages.sidebar import afficher_sidebar
 from src.tools.session import init_session
 from src.controllers.commande_controller import transformer_panier
-
+import time
 
 init_session()
 afficher_sidebar()
@@ -15,10 +15,14 @@ panier = st.session_state.panier
 if panier["total_panier"] == 0.00:
     st.write("Votre panier est vide")
 else:
+    if panier["total_panier"] >= 1500.00:
+        panier["frais_livraison"] = 0.00
+
     st.write(f"Date: {panier["date_panier"]}")
 
     df_total = pd.DataFrame([{
-        "Total du panier (€)": f"{panier["total_panier"]:.2f}",
+        "Frais de livraison (€)": f"{panier["frais_livraison"]:.2f}",
+        "Total du panier (€)": f"{panier["total_panier"]+panier["frais_livraison"]:.2f}",
     }])
 
     df = pd.DataFrame([{
@@ -35,6 +39,7 @@ else:
     }, hide_index=True)
 
     st.dataframe(df_total, column_config={
+        "Frais de livraison (€)": st.column_config.NumberColumn(format="euro"),
         "Total du panier (€)": st.column_config.NumberColumn(format="euro"),
     }, hide_index=True)
 
@@ -43,4 +48,6 @@ else:
             st.switch_page("pages/connexion.py")
         else:
             transformer_panier()
-
+            with st.spinner(text="Veuillez patienter", show_time=False):
+                time.sleep(2)
+            st.switch_page("accueil.py")
