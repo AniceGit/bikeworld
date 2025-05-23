@@ -51,7 +51,8 @@ def connexion_vue():
     if st.button("Se connecter"):
         if email and mdp:
             if connecter_utilisateur(email, mdp):
-                time.sleep(2)
+                with st.spinner(text="Veuillez patienter", show_time=False):
+                    time.sleep(2)
                 st.switch_page("accueil.py")
         else :
             st.markdown('<p class="custom-write">Veuillez saisir vos informations personnelles</p>', unsafe_allow_html=True)

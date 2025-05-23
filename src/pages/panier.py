@@ -3,7 +3,7 @@ import pandas as pd
 from pages.sidebar import afficher_sidebar
 from src.tools.session import init_session
 from src.controllers.commande_controller import transformer_panier
-
+import time
 
 init_session()
 afficher_sidebar()
@@ -48,4 +48,6 @@ else:
             st.switch_page("pages/connexion.py")
         else:
             transformer_panier()
-
+            with st.spinner(text="Veuillez patienter", show_time=False):
+                time.sleep(2)
+            st.switch_page("accueil.py")
