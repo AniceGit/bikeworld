@@ -8,6 +8,7 @@ __pycache__/
 
 # Sqlite3
 *.db
+db/utilisateur_session.json
 
 # Distribution / packaging
 .Python
