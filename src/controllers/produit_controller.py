@@ -69,3 +69,20 @@ def get_top_3_ventes() -> list[Produit]:
             produits.append(Produit(id, nom, desc, spec_tech, couleur, image, prix, stock, ventes)) 
 
         return produits
+
+
+def get_produit_nom_by_id(id_produit) -> str:
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT nom
+            FROM produit
+            WHERE id = :id_produit
+        """, {"id_produit": id_produit})
+        result = cur.fetchone()
+
+        if not result:
+            raise Exception("Produit non trouvé")
+
+        nom_produit = result
+        return nom_produit

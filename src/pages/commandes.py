@@ -3,7 +3,8 @@ import pandas as pd
 import time
 from src.tools.session import init_session
 from pages.sidebar import afficher_sidebar
-from controllers.commande_controller import supprimer_commande, get_commandes, get_adresse_commande
+from src.controllers.commande_controller import supprimer_commande, get_commandes, get_adresse_commande
+from src.controllers.produit_controller import get_produit_nom_by_id
 
 
 init_session()
@@ -21,7 +22,6 @@ for cmd in commandes:
 
     data.append({
         "ID": cmd.id,
-        "Client": cmd.id_utilisateur,
         "Date": cmd.date_commande,
         "Frais de livraison (€)": f"{cmd.frais_livraison:.2f}",
         "Total (€)": f"{cmd.prix_total:.2f}",
@@ -29,7 +29,11 @@ for cmd in commandes:
     })
 
 df = pd.DataFrame(data)
-st.dataframe(df, use_container_width=True)
+
+st.dataframe(df, column_config={
+        "Frais de livraison (€)": st.column_config.NumberColumn(format="euro"),
+        "Total (€)": st.column_config.NumberColumn(format="euro")
+    }, hide_index=True)
 
 commande_ids = [cmd.id for cmd in commandes]
 selected_id = st.selectbox("Sélectionner une commande :", commande_ids)
@@ -43,12 +47,17 @@ if selected_id:
         st.write(f"Adresse : {adresse.numero} {adresse.type_voie} {adresse.nom_voie}, {adresse.code_postal} {adresse.ville}")
       
         ligne_df = pd.DataFrame([{
-            "Produit": l.id_produit,
+            "Produit": get_produit_nom_by_id(l.id_produit),
             "Quantité": l.quantite,
             "Prix unitaire (€)": f"{l.prix:.2f}",
             "Total (€)": f"{l.quantite * l.prix :.2f}"
         } for l in cmd.liste_produit_commande])
-        st.table(ligne_df)
+
+#        st.table(ligne_df)
+        st.dataframe(ligne_df, column_config={
+            "Prix unitaire (€)": st.column_config.NumberColumn(format="euro"),
+            "Total (€)": st.column_config.NumberColumn(format="euro")
+        }, hide_index=True)
 
         if cmd.etat == "Validee":
             if st.button(f"🗑️ Supprimer la commande {cmd.id}", key=f"delete_{cmd.id}"):
