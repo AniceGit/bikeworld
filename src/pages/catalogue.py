@@ -4,9 +4,10 @@ from controllers.produit_controller import get_produits
 from models.produit import Produit
 import base64
 
+
 afficher_sidebar()
 # Configuration de la page
-
+st.set_page_config(layout="wide")
 st.title("Bienvenue sur la page des produits de BIKEWORLD!")
 
 def set_bg_image(image_file):
