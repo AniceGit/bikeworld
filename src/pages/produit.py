@@ -1,7 +1,6 @@
 import streamlit as st
 import sqlite3
 from pages.sidebar import afficher_sidebar
-from models.produit import Produit
 from controllers.produit_controller import get_details_produit
 from src.tools.session import init_session
 
@@ -59,11 +58,5 @@ with col1:
                         st.session_state.panier = panier
                         print(st.session_state.panier)
                         st.success(f"{produit.nom} a été ajouté au panier !")
-
-
-
-
-
-
 
 
