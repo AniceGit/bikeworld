@@ -1,4 +1,5 @@
 from src.models.adresse import Adresse
+from models.adresse import adresse_from_dict
 
 class Utilisateur:
 
@@ -51,7 +52,6 @@ def utilisateur_from_dict(data):
         data["telephone"]
     )
     if data.get("adresse"):
-        from models.adresse import adresse_from_dict
         utilisateur.adresse = adresse_from_dict(data["adresse"])
     return utilisateur
 

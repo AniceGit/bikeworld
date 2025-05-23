@@ -94,6 +94,36 @@ def get_utilisateur_by_email(email) -> None:
                 utilisateur.adresse = adresse
             return utilisateur
         return None
+    
+#-----Récupérer les adresses d'un utilisateur-----#
+def get_adresses_utilisateur(id:int):
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM adresse WHERE id_utilisateur = :id", {'id':id})
+        result_adresses = cur.fetchall()
+        if result_adresses is None:
+                raise Exception(f"Aucune adresse")
+        
+        adresses=[]
+        for id, numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur in result_adresses:
+                adresses.append(Adresse(id, numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur)) 
+        return adresses
+
+#-----Modifier adresse-----#
+def modifier_adresse_utilisateur(nouvelle_adresse:Adresse):
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+        cur.execute('''UPDATE adresse SET numero = :numero, type_voie = :type_voie, nom_voie = :nom_voie, code_postal = :code_postal, ville = :ville, pays = :pays, defaut = :defaut WHERE id = :id_adresse
+                    ''', {'numero':nouvelle_adresse.numero,'type_voie':nouvelle_adresse.type_voie,'nom_voie':nouvelle_adresse.nom_voie,'code_postal':nouvelle_adresse.code_postal,'ville':nouvelle_adresse.ville,'pays':nouvelle_adresse.pays,'defaut':nouvelle_adresse.defaut, 'id_adresse':nouvelle_adresse.id})
+
+
+#-----modification de l'utilisateur-----#
+def modifier_utilisateur(nouvel_utilisateur:Utilisateur):
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+        cur.execute('''UPDATE utilisateur SET nom = :nom, prenom = :prenom, email = :email, telephone = :telephone WHERE id = :id_nouvel_utilisateur
+                    ''', {'nom':nouvel_utilisateur.nom,'prenom':nouvel_utilisateur.prenom,'email':nouvel_utilisateur.email,'telephone':nouvel_utilisateur.telephone, 'id_nouvel_utilisateur':nouvel_utilisateur.id})
+        sauvegarder_json_utilisateur(nouvel_utilisateur)
 
 #-----déconnexion de l'utilisateur-----#
 def deconnecter_utilisateur() -> str:

@@ -46,6 +46,9 @@ class Adresse:
             "defaut": self.defaut,
             "id_utilisateur": self.id_utilisateur
         }
+    def __str__(self) -> str:
+        adresse_to_str = f"{self.numero} {self.type_voie} {self.nom_voie} - {self.code_postal} {self.ville} - {self.pays}"
+        return adresse_to_str
 
 def adresse_from_dict(data):
     return Adresse(
