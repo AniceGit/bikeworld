@@ -1,14 +1,14 @@
-import streamlit as st
 import sqlite3
 from models.produit import Produit
 
 
-def get_produits():
-    #affiche tous les articles
+def get_produits() -> list[Produit]:
+    # affiche tous les articles
 
     with sqlite3.connect("bikeworld.db") as conn:
-            cur = conn.cursor()
-            cur.execute(""" \
+        cur = conn.cursor()
+        cur.execute(
+            """ \
                     SELECT id,
                         nom,
                         desc,
@@ -20,25 +20,32 @@ def get_produits():
                         ventes
                     FROM produit 
                 """
-            )
-            result = cur.fetchall()
-            if result is None:
-                raise Exception(f"Aucun articles")
-            
-            lignes = []
-            for id, nom, desc, spec_tech, couleur, image, prix, stock, ventes in result:
-                lignes.append(Produit(id, nom, desc, spec_tech, couleur, image, prix, stock, ventes)) 
-            return lignes
-    
-#st.title("Liste des Produits")
+        )
+        result = cur.fetchall()
+        if result is None:
+            raise Exception(f"Aucun articles")
 
-def get_details_produit(id_produit):
+        lignes = []
+        for id, nom, desc, spec_tech, couleur, image, prix, stock, ventes in result:
+            lignes.append(
+                Produit(id, nom, desc, spec_tech, couleur, image, prix, stock, ventes)
+            )
+        return lignes
+
+
+# st.title("Liste des Produits")
+
+
+def get_details_produit(id_produit: int) -> Produit:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
-        cur.execute("""
+        cur.execute(
+            """
             SELECT id, nom, desc, spec_tech, couleur, image, prix, stock, ventes
             FROM produit WHERE id = ?
-        """, (id_produit,))
+        """,
+            (id_produit,),
+        )
         result = cur.fetchone()
 
         if not result:
@@ -47,18 +54,20 @@ def get_details_produit(id_produit):
         id, nom, desc, spec_tech, couleur, image, prix, stock, ventes = result
         produit = Produit(id, nom, desc, spec_tech, couleur, image, prix, stock, ventes)
         return produit
-       
+
 
 def get_top_3_ventes() -> list[Produit]:
-     
-     with sqlite3.connect("bikeworld.db") as conn:
+
+    with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
-        cur.execute("""
+        cur.execute(
+            """
             SELECT id, nom, desc, spec_tech, couleur, image, prix, stock, ventes
             FROM produit
             ORDER BY ventes DESC
             LIMIT 3
-        """)
+        """
+        )
         result = cur.fetchall()
 
         if not result:
@@ -66,19 +75,24 @@ def get_top_3_ventes() -> list[Produit]:
 
         produits = []
         for id, nom, desc, spec_tech, couleur, image, prix, stock, ventes in result:
-            produits.append(Produit(id, nom, desc, spec_tech, couleur, image, prix, stock, ventes)) 
+            produits.append(
+                Produit(id, nom, desc, spec_tech, couleur, image, prix, stock, ventes)
+            )
 
         return produits
 
 
-def get_produit_nom_by_id(id_produit) -> str:
+def get_produit_nom_by_id(id_produit: int) -> str:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
-        cur.execute("""
+        cur.execute(
+            """
             SELECT nom
             FROM produit
             WHERE id = :id_produit
-        """, {"id_produit": id_produit})
+        """,
+            {"id_produit": id_produit},
+        )
         result = cur.fetchone()
 
         if not result:

@@ -29,9 +29,23 @@ def supprimer_commande(id_commande: int) -> int | None:
         if result is None:
             raise Exception(f"Commande {id_commande} introuvable.")
 
-        id, date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse = result
+        (
+            id,
+            date_commande,
+            etat,
+            prix_total,
+            frais_livraison,
+            id_utilisateur,
+            id_adresse,
+        ) = result
         commande = Commande(
-            id, date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse
+            id,
+            date_commande,
+            etat,
+            prix_total,
+            frais_livraison,
+            id_utilisateur,
+            id_adresse,
         )
 
         if commande.etat == "Validee":
@@ -43,22 +57,21 @@ def supprimer_commande(id_commande: int) -> int | None:
                 WHERE id_commande = :id_commande
             """,
                 {"id_commande": id_commande},
-            )            
+            )
             result = cur.fetchall()
 
             if result is None:
                 raise Exception(f"Commande {id_commande} introuvable.")
 
             for id_produit, quantite in result:
-                cur.execute("""
+                cur.execute(
+                    """
                     UPDATE produit
                     SET stock = stock + :quantite, ventes = ventes - :quantite
                     WHERE id = :id
-                """,{ "quantite": quantite,
-                      "id": id_produit
-                    }
+                """,
+                    {"quantite": quantite, "id": id_produit},
                 )
-
 
             # Suppression des lignes (produit_commande) de la commande
             cur.execute(
@@ -68,8 +81,6 @@ def supprimer_commande(id_commande: int) -> int | None:
                 {"id_commande": id_commande},
             )
             result = cur.fetchall()
-
-
 
             cur.execute(
                 """
@@ -159,17 +170,31 @@ def get_commandes(id_utilisateur: int) -> list[Commande]:
 
             lignes = []
 
-            for id_produit_commande, quantite, prix, id_produit, id_commande in result_lignes:
-                lignes.append(ProduitCommande(id=id_produit_commande, quantite=quantite, prix=prix, id_produit=id_produit, id_commande=id_commande))
-            
+            for (
+                id_produit_commande,
+                quantite,
+                prix,
+                id_produit,
+                id_commande,
+            ) in result_lignes:
+                lignes.append(
+                    ProduitCommande(
+                        id=id_produit_commande,
+                        quantite=quantite,
+                        prix=prix,
+                        id_produit=id_produit,
+                        id_commande=id_commande,
+                    )
+                )
+
             ma_commande = Commande(
-                    id=id_commande,
-                    date_commande=date_commande,
-                    etat=etat,
-                    prix_total=prix_total,
-                    frais_livraison=frais_livrason,
-                    id_utilisateur=id_utilisateur,
-                    id_adresse=id_adresse,
+                id=id_commande,
+                date_commande=date_commande,
+                etat=etat,
+                prix_total=prix_total,
+                frais_livraison=frais_livrason,
+                id_utilisateur=id_utilisateur,
+                id_adresse=id_adresse,
             )
             ma_commande.liste_produit_commande = lignes
             commandes.append(ma_commande)
@@ -179,7 +204,7 @@ def get_commandes(id_utilisateur: int) -> list[Commande]:
 
 def get_adresse_commande(id_adresse: int) -> Adresse | None:
 
-    adresse_commande = None    
+    adresse_commande = None
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
@@ -204,24 +229,45 @@ def get_adresse_commande(id_adresse: int) -> Adresse | None:
         if result is None:
             raise Exception(f"Adresse de la commande {id_adresse} introuvable.")
 
-        id, numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur = result
+        (
+            id,
+            numero,
+            type_voie,
+            nom_voie,
+            code_postal,
+            ville,
+            pays,
+            defaut,
+            id_utilisateur,
+        ) = result
         adresse_commande = Adresse(
-            id, numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur
+            id,
+            numero,
+            type_voie,
+            nom_voie,
+            code_postal,
+            ville,
+            pays,
+            defaut,
+            id_utilisateur,
         )
 
     return adresse_commande
 
 
-def transformer_panier():
+def transformer_panier() -> None:
     panier = st.session_state.panier
 
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
-        print(f"date_commande: {panier["date_panier"]}, id_utilisateur: {st.session_state["utilisateur"].id}")
+        print(
+            f"date_commande: {panier['date_panier']}, id_utilisateur: {st.session_state['utilisateur'].id}"
+        )
 
         # Insertion de la commande
-        cur.execute("""
+        cur.execute(
+            """
             INSERT INTO commande (date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse)
             VALUES (:date_commande,
                     :etat,
@@ -229,13 +275,17 @@ def transformer_panier():
                     :frais_livraison,
                     :id_utilisateur,
                     :id_adresse)
-        """, {"date_commande": panier["date_panier"],
-            "etat": "Validee",
-            "prix_total": panier["total_panier"],
-            "frais_livraison": panier["frais_livraison"] if panier["total_panier"] < 1500 else 0.00,
-            "id_utilisateur": st.session_state["utilisateur"].id,
-            "id_adresse": st.session_state.utilisateur.adresse.id
-            }
+        """,
+            {
+                "date_commande": panier["date_panier"],
+                "etat": "Validee",
+                "prix_total": panier["total_panier"],
+                "frais_livraison": (
+                    panier["frais_livraison"] if panier["total_panier"] < 1500 else 0.00
+                ),
+                "id_utilisateur": st.session_state["utilisateur"].id,
+                "id_adresse": st.session_state.utilisateur.adresse.id,
+            },
         )
 
         # retour de l'id créé
@@ -244,27 +294,31 @@ def transformer_panier():
         # Insertion des lignes de commande
         for ligne in panier["liste_produits_quantite"]:
 
-            print(f"commande: {cmd_id}, produit: {ligne["produit_id"]}, quantite: {ligne["quantite"]}, prix: {ligne["prix"]}")
+            print(
+                f"commande: {cmd_id}, produit: {ligne['produit_id']}, quantite: {ligne['quantite']}, prix: {ligne['prix']}"
+            )
 
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO produit_commande (id_commande, id_produit, quantite, prix)
                 VALUES (:id_commande,
                         :id_produit,
                         :quantite,
                         :prix)
-            """, {"id_commande": cmd_id,
-                  "id_produit": ligne["produit_id"],
-                  "quantite": ligne["quantite"],
-                  "prix": ligne["prix"]
-                  }
+            """,
+                {
+                    "id_commande": cmd_id,
+                    "id_produit": ligne["produit_id"],
+                    "quantite": ligne["quantite"],
+                    "prix": ligne["prix"],
+                },
             )
 
-            cur.execute("""
+            cur.execute(
+                """
                 UPDATE produit
                 SET stock = stock - :quantite, ventes = ventes + :quantite
                 WHERE id = :id
-            """, {"quantite": ligne["quantite"],
-                  "id": ligne["produit_id"]
-                  }
+            """,
+                {"quantite": ligne["quantite"], "id": ligne["produit_id"]},
             )
-

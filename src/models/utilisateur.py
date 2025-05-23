@@ -1,17 +1,13 @@
 from src.models.adresse import Adresse
-from models.adresse import adresse_from_dict
+from src.models.adresse import adresse_from_dict
+
 
 class Utilisateur:
 
-    def __init__(self, 
-                 id: int,
-                 nom: str,
-                 prenom: str,
-                 email: str,
-                 password: str,
-                 telephone: str
+    def __init__(
+        self, id: int, nom: str, prenom: str, email: str, password: str, telephone: str
     ) -> None:
-        """ Instanciation d'un Utilisateur
+        """Instanciation d'un Utilisateur
 
         Args:
             id (int): identifiant de l'utilisateur (pk)
@@ -29,8 +25,8 @@ class Utilisateur:
         self.password = password
         self.telephone = telephone
         self.adresse: Adresse = None
-    
-    def to_dict(self):
+
+    def to_dict(self) -> dict:
         return {
             "id": self.id,
             "nom": self.nom,
@@ -38,21 +34,19 @@ class Utilisateur:
             "email": self.email,
             "password": self.password,
             "telephone": self.telephone,
-            "adresse": self.adresse.to_dict() if self.adresse else None
+            "adresse": self.adresse.to_dict() if self.adresse else None,
         }
 
-    
-def utilisateur_from_dict(data):
+
+def utilisateur_from_dict(data) -> Utilisateur:
     utilisateur = Utilisateur(
         data["id"],
         data["nom"],
         data["prenom"],
         data["email"],
         data["password"],
-        data["telephone"]
+        data["telephone"],
     )
     if data.get("adresse"):
         utilisateur.adresse = adresse_from_dict(data["adresse"])
     return utilisateur
-
-

@@ -1,14 +1,10 @@
 class ProduitCommande:
 
-    def __init__(self,
-                 id: int,
-                 quantite: int,
-                 prix: float,
-                 id_produit: int,
-                 id_commande: int
+    def __init__(
+        self, id: int, quantite: int, prix: float, id_produit: int, id_commande: int
     ) -> None:
-        """ Instanciation d'une ligne de commande ProduitCommande
-        
+        """Instanciation d'une ligne de commande ProduitCommande
+
         Args:
             id (int): identifiant du ProduitCommande (pk)
             quantite (int): quantite commandee

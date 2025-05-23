@@ -11,5 +11,5 @@ if prenom is not None:
         st.success(f"Au revoir {prenom} !")
         time.sleep(2)
     st.switch_page("accueil.py")
-else : 
+else:
     st.info("Vous n'étiez pas connecté")
