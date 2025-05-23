@@ -7,9 +7,12 @@ import base64
 
 
 afficher_sidebar()
+st.title("")
+st.markdown(
+    "<h2 style='text-align: center; color: #ff7000; background-color: #000000;'>Bienvenue sur la page des produits de BIKEWORLD!</h2>",
+    unsafe_allow_html=True
+)
 
-
-st.title("Bienvenue sur la page des produits de BIKEWORLD!")
 
 def set_bg_image(image_file):
     with open(image_file, "rb") as image:
@@ -60,7 +63,7 @@ for i, produit in enumerate(liste_produits):
                     st.markdown(
                         f"""
                         <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
-                            <p style='font-size: 20px; font-weight: bold; margin: 0;'>{produit.nom}</p>
+                            <p style='font-size: 20px; font-weight: bold; color: #ff7000; margin: 0;'>{produit.nom}</p>
                         </div>
                         """,
                         unsafe_allow_html=True
