@@ -5,9 +5,10 @@ from models.produit import Produit
 import base64
 
 
+
 afficher_sidebar()
-# Configuration de la page
-st.set_page_config(layout="wide")
+
+
 st.title("Bienvenue sur la page des produits de BIKEWORLD!")
 
 def set_bg_image(image_file):
@@ -49,14 +50,24 @@ colonnes = st.columns(nb_colonnes)
 # Parcourir les produits et les afficher dans la grille
 for i, produit in enumerate(liste_produits):
     column_index = i % nb_colonnes
-    with colonnes[column_index]:   
-        
+    with colonnes[column_index]:          
         if produit.image:
-            st.image(produit.image, caption=produit.nom, use_container_width=True)
-            st.write(f"Prix: {produit.prix:.2f}")
-            if st.button("DETAIL", key=produit.id):
-                st.session_state["produit"]=produit
-                st.switch_page("pages/produit.py")
+            st.image(produit.image, use_container_width=True)
+            st.markdown(
+                f"""
+                <div style='background-color: #494341; padding: 4px; border-radius: 5px;'>
+                    <p style='font-size: 24px; font-weight: bold; margin: 0;'>{produit.nom}</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+            prix_col, button_col = st.columns([1,1])
+            with prix_col:
+                st.markdown(f"<p style='font-size: 24px;'>Prix: {produit.prix:.2f} €</p>", unsafe_allow_html=True)
+            with button_col:
+                if st.button("Détail", key=produit.id):
+                    st.session_state["produit"]=produit
+                    st.switch_page("pages/produit.py")
         else:
             st.write("Aucune image disponible")
         
