@@ -5,24 +5,6 @@ from src.models.adresse import Adresse
 from src.models.produit_commande import ProduitCommande
 
 
-# def creer_commande(commande: Commande, lignes: list[ProduitCommande]) -> int | None:
-
-#         # retour de l'id créé
-#         cmd_id = cur.lastrowid
-#         if cmd_id:
-#             commande.id = cmd_id
-
-#         # Insertion des lignes de commande
-#         for ligne in lignes:
-#             ligne.id_commande = commande.id
-#             cur.execute("""
-#                 INSERT INTO produit_commande (id_commande, id_produit, quantite, prix)
-#                 VALUES (?, ?, ?, ?)
-#             """, (ligne.id_commande, ligne.id_produit, ligne.quantite, ligne.prix))
-
-#     return commande.id if commande.id else None
-
-
 def supprimer_commande(id_commande: int) -> int | None:
 
     with sqlite3.connect("bikeworld.db") as conn:
@@ -247,3 +229,13 @@ def transformer_panier():
                   "prix": ligne["prix"]
                   }
             )
+
+            cur.execute("""
+                UPDATE produit
+                SET stock = stock - :quantite
+                WHERE id = :id
+            """, {"quantite": ligne["quantite"],
+                  "id": ligne["produit_id"]
+                  }
+            )
+
