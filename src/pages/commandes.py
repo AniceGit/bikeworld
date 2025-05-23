@@ -62,6 +62,7 @@ if selected_id:
         if cmd.etat == "Validee":
             if st.button(f"🗑️ Supprimer la commande {cmd.id}", key=f"delete_{cmd.id}"):
                 supprimer_commande(cmd.id)
-                st.success(f"Commande {cmd.id} supprimée.")
-                time.sleep(2)
+                with st.spinner(text="Veuillez patienter", show_time=False):
+                    st.success(f"Commande {cmd.id} supprimée.")
+                    time.sleep(2)
                 st.switch_page("pages/commandes.py")

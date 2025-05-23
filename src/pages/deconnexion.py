@@ -7,8 +7,9 @@ afficher_sidebar()
 
 prenom = deconnecter_utilisateur()
 if prenom is not None:
-    st.success(f"Aurevoir {prenom} !")
-    time.sleep(2)
+    with st.spinner(text="Veuillez patienter", show_time=False):
+        st.success(f"Au revoir {prenom} !")
+        time.sleep(2)
     st.switch_page("accueil.py")
 else : 
     st.info("Vous n'étiez pas connecté")

@@ -29,11 +29,37 @@ def supprimer_commande(id_commande: int) -> int | None:
         if result is None:
             raise Exception(f"Commande {id_commande} introuvable.")
 
+        id, date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse = result
         commande = Commande(
-            result[0], result[1], result[2], result[3], result[4], result[5], result[6]
+            id, date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse
         )
 
         if commande.etat == "Validee":
+            # Récupération des produits / quantités / des produits de la commande pour remettre à jour les stocks/ventes sur le produit
+            cur.execute(
+                """
+                SELECT id_produit, quantite
+                FROM produit_commande 
+                WHERE id_commande = :id_commande
+            """,
+                {"id_commande": id_commande},
+            )            
+            result = cur.fetchall()
+
+            if result is None:
+                raise Exception(f"Commande {id_commande} introuvable.")
+
+            for id_produit, quantite in result:
+                cur.execute("""
+                    UPDATE produit
+                    SET stock = stock + :quantite, ventes = ventes - :quantite
+                    WHERE id = :id
+                """,{ "quantite": quantite,
+                      "id": id_produit
+                    }
+                )
+
+
             # Suppression des lignes (produit_commande) de la commande
             cur.execute(
                 """
@@ -41,6 +67,9 @@ def supprimer_commande(id_commande: int) -> int | None:
             """,
                 {"id_commande": id_commande},
             )
+            result = cur.fetchall()
+
+
 
             cur.execute(
                 """
