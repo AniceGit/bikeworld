@@ -3,6 +3,9 @@ from pages.sidebar import afficher_sidebar
 from models.utilisateur import Utilisateur
 from models.adresse import Adresse
 from controllers.utilisateur_controller import modifier_utilisateur, sauvegarder_json_utilisateur, get_adresses_utilisateur, modifier_adresse_utilisateur
+from tools.session import init_session
+
+init_session()
 
 #Affichage sidebar et titre
 afficher_sidebar()
@@ -42,7 +45,13 @@ option = st.selectbox(
     index=None,
     placeholder="Choisir...",
 )
+
+#Button disabled si pas d'adresse choisie et si adresse choisie alors button à None si aucun changement
 button_disabled = option == None
+if option is not None:
+    adresse_selectionnee = next((adresse for adresse in adresses if adresse.__str__() == option),None)
+    if utilisateur.nom == nom and utilisateur.prenom == prenom and utilisateur.email == email and utilisateur.telephone == telephone and adresse.id == adresse_selectionnee.id:
+        button_disabled = True
 
 #On affecte les valeurs insérées au nouvel utilisateur et on le modifie en db, session et json puis on refresh la page
 if st.button("Modifier",disabled=button_disabled):
@@ -53,7 +62,7 @@ if st.button("Modifier",disabled=button_disabled):
     nouvel_utilisateur.telephone = telephone if telephone else utilisateur.telephone
 
     #On récupère l'adresse selectionnée et on lui change sa valeur défaut pour en faire l'adresse par défaut puis on la modifie en db
-    nouvelle_adresse:Adresse = next((adresse for adresse in adresses if adresse.__str__() == option),None)
+    nouvelle_adresse:Adresse = adresse_selectionnee
     nouvelle_adresse.defaut = 1
     modifier_adresse_utilisateur(nouvelle_adresse)
     #On modifie la valeur défaut de l'adresse précédente (actuellement dans l'objet utilisateur) et on la modifie en db
