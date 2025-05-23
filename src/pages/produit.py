@@ -15,8 +15,10 @@ produit = get_details_produit(id)
 st.title(produit.nom)
 
 
-st.write(f"<span style='font-size: 20px;'>**Description**</span>: {produit.description}",unsafe_allow_html=True)
-st.write(f"<span style='font-size: 20px;'>**Spécifications Techniques**</span>: {produit.spec_tech}",unsafe_allow_html=True)
+st.write(f"<span style='font-size: 20px;'>**Description**</span>:" ,unsafe_allow_html=True)
+st.write(f"{produit.description}",unsafe_allow_html=True)
+st.write(f"<span style='font-size: 20px;'>**Spécifications Techniques**</span>:" ,unsafe_allow_html=True)
+st.write(f"{produit.spec_tech}")
 st.write(f"<span style='font-size: 20px;'>**Couleur**</span>: {produit.couleur}",unsafe_allow_html=True)
 st.write(f"<span style='font-size: 20px;'>**Prix**</span>: {produit.prix}",unsafe_allow_html=True)
 st.write(f"<span style='font-size: 20px;'>**Stock**</span>: {produit.stock}",unsafe_allow_html=True)

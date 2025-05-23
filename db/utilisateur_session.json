@@ -1,1 +1,0 @@
-{"id": 2, "nom": "Muller", "prenom": "Stephane", "email": "stephane@example.com", "password": "testStephane", "telephone": "06.07.08.09.10", "adresse": {"id": 2, "numero": "22 BIS", "type_voie": "avenue", "nom_voie": "du G\u00e9n\u00e9ral Leclerc", "code_postal": "13003", "ville": "Marseille", "pays": "France", "defaut": 1, "id_utilisateur": 2}}

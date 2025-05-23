@@ -17,11 +17,13 @@ colonnes = st.columns(nb_colonnes)
 for i, produit in enumerate(liste_produits):
     column_index = i % nb_colonnes
     with colonnes[column_index]:   
-        st.write(f"{produit.nom}, Prix: {produit.prix}")
+        
         if produit.image:
             st.image(produit.image, caption=produit.nom, use_container_width=True)
+            st.write(f"Prix: {produit.prix}")
             if st.button("DETAIL", key=produit.id):
                 st.session_state["produit"]=produit
                 st.switch_page("pages/produit.py")
         else:
             st.write("Aucune image disponible")
+        

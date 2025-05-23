@@ -32,6 +32,7 @@ image_file = "images/333497.jpg"  # Remplacez par le chemin de votre image
 
 # Appliquer le fond d'écran
 set_bg_image(image_file)
+from pages.bikeworld import afficher_produits_stars
 
 # Configuration de la page
 #st.set_page_config(page_title="BIKEWORLD", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
@@ -43,8 +44,8 @@ def afficher_accueil():
     st.markdown('<h1 class="custom-title">BIKEWORLD</h1>',unsafe_allow_html=True)
     st.write("The ways of Bithume")
 
-    if st.button("Voir mes commandes"):
-        st.switch_page("pages/commandes.py")
-
+    afficher_produits_stars()
+    
+    
 
 afficher_accueil()
