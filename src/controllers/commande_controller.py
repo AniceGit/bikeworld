@@ -232,7 +232,7 @@ def transformer_panier():
 
             cur.execute("""
                 UPDATE produit
-                SET stock = stock - :quantite
+                SET stock = stock - :quantite, ventes = ventes + :quantite
                 WHERE id = :id
             """, {"quantite": ligne["quantite"],
                   "id": ligne["produit_id"]
