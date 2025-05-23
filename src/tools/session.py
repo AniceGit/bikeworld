@@ -1,5 +1,5 @@
 import streamlit as st
-import json, os
+import json, os, datetime
 from models.utilisateur import utilisateur_from_dict
 
 def init_session():
@@ -19,3 +19,10 @@ def init_session():
         st.session_state["panier"] = None
     if "produit" not in st.session_state:
         st.session_state["produit"] = None
+
+    if "panier" not in st.session_state:
+        st.session_state.panier = {
+            "date_panier": str(datetime.date.today()),
+            "total_panier": 0.0,
+            "liste_produits_quantite": []
+        }
