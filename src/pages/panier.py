@@ -3,7 +3,8 @@ import pandas as pd
 from pages.sidebar import afficher_sidebar
 from src.tools.session import init_session
 from src.controllers.commande_controller import transformer_panier
-import time
+import time, datetime
+
 
 init_session()
 afficher_sidebar()
@@ -48,6 +49,14 @@ else:
             st.switch_page("pages/connexion.py")
         else:
             transformer_panier()
+            
+            st.session_state.panier = {
+                "date_panier": str(datetime.date.today()),
+                "total_panier": 0.0,
+                "frais_livraison": 20.0,
+                "liste_produits_quantite": []
+            }
+
             with st.spinner(text="Veuillez patienter", show_time=False):
                 time.sleep(2)
-            st.switch_page("accueil.py")
+            st.switch_page("pages/commandes.py")
