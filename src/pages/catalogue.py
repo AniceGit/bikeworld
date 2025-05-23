@@ -5,6 +5,7 @@ from models.produit import Produit
 import base64
 
 afficher_sidebar()
+# Configuration de la page
 
 st.title("Bienvenue sur la page des produits de BIKEWORLD!")
 

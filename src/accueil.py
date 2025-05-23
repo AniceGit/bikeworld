@@ -35,8 +35,7 @@ image_file = "images/accueil_background.jpg"  # Remplacez par le chemin de votre
 set_bg_image(image_file)
 
 
-# Configuration de la page
-#st.set_page_config(page_title="BIKEWORLD", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+
 
 def afficher_accueil():
     init_session()
