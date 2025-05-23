@@ -7,27 +7,6 @@ from src.models.produit_commande import ProduitCommande
 
 # def creer_commande(commande: Commande, lignes: list[ProduitCommande]) -> int | None:
 
-#     with sqlite3.connect("bikeworld.db") as conn:3+
-#         cur = conn.cursor()
-
-#         # Insertion de la commande
-#         cur.execute("""
-#             INSERT INTO commandes (date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse)
-#             VALUES (:date_commande,
-#                     :etat,
-#                     :prix_total,
-#                     :frais_livraison,
-#                     :id_utilisateur,
-#                     :id_adresse)
-#         """, {"date_commande": commande.date_commande,
-#               "etat": commande.etat,
-#               "prix_total": commande.prix_total,
-#               "frais_livraison": commande.frais_livraison,
-#               "id_utilisateur": commande.id_utilisateur,
-#               "id_adresse": commande.id_adresse
-#             }
-#         )
-
 #         # retour de l'id créé
 #         cmd_id = cur.lastrowid
 #         if cmd_id:
@@ -214,13 +193,57 @@ def get_adresse_commande(id_adresse: int) -> Adresse | None:
         if result is None:
             raise Exception(f"Adresse de la commande {id_adresse} introuvable.")
 
-
+        id, numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur = result
         adresse_commande = Adresse(
-            result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8]
+            id, numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur
         )
 
     return adresse_commande
 
 
 def transformer_panier():
-    pass
+    panier = st.session_state.panier
+
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+
+        print(f"date_commande: {panier["date_panier"]}, id_utilisateur: {st.session_state["utilisateur"].id}")
+
+        # Insertion de la commande
+        cur.execute("""
+            INSERT INTO commande (date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse)
+            VALUES (:date_commande,
+                    :etat,
+                    :prix_total,
+                    :frais_livraison,
+                    :id_utilisateur,
+                    :id_adresse)
+        """, {"date_commande": panier["date_panier"],
+            "etat": "Validee",
+            "prix_total": panier["total_panier"],
+            "frais_livraison": panier["frais_livraison"] if panier["total_panier"] < 1500 else 0.00,
+            "id_utilisateur": st.session_state["utilisateur"].id,
+            "id_adresse": st.session_state.utilisateur.adresse.id
+            }
+        )
+
+        # retour de l'id créé
+        cmd_id = cur.lastrowid
+
+        # Insertion des lignes de commande
+        for ligne in panier["liste_produits_quantite"]:
+
+            print(f"commande: {cmd_id}, produit: {ligne["produit_id"]}, quantite: {ligne["quantite"]}, prix: {ligne["prix"]}")
+
+            cur.execute("""
+                INSERT INTO produit_commande (id_commande, id_produit, quantite, prix)
+                VALUES (:id_commande,
+                        :id_produit,
+                        :quantite,
+                        :prix)
+            """, {"id_commande": cmd_id,
+                  "id_produit": ligne["produit_id"],
+                  "quantite": ligne["quantite"],
+                  "prix": ligne["prix"]
+                  }
+            )
