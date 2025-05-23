@@ -34,21 +34,27 @@ if st.button("Ajouter au panier", key=produit.id):
             p_id = produit_quantite["produit_id"]
 
             if p_id == produit.id:
-                produit_quantite["quantite"] += 1
+                if produit_quantite["quantite"] + 1 > produit.stock:
+                    st.error(f"Stock insuffisant pour le produit {produit.nom} !")
+                    break
+                else:
+                    produit_quantite["quantite"] += 1
+                    panier["total_panier"] += produit.prix
+                    panier["total_panier"] = round(panier["total_panier"],2)
+                    produit_quantite["total"] = produit.prix * produit_quantite["quantite"]
+                    produit_quantite["total"] = round(produit_quantite["total"],2)
+                    st.session_state.panier = panier
+                    print(st.session_state.panier)
+                    st.success(f"{produit.nom} a été ajouté au panier !")
+                    break
+
+        else:
+            if produit.stock == 0:
+                st.error(f"Stock insuffisant pour le produit {produit.nom} !")
+            else:
                 panier["total_panier"] += produit.prix
                 panier["total_panier"] = round(panier["total_panier"],2)
-                produit_quantite["total"] = produit.prix * produit_quantite["quantite"]
-                produit_quantite["total"] = round(produit_quantite["total"],2)
+                panier["liste_produits_quantite"].append({"produit_id": produit.id, "produit": produit.nom, "quantite": 1, "prix": produit.prix, "total": produit.prix})
                 st.session_state.panier = panier
                 print(st.session_state.panier)
-                break
-        
-        else:
-            panier["total_panier"] += produit.prix
-            panier["total_panier"] = round(panier["total_panier"],2)
-            panier["liste_produits_quantite"].append({"produit_id": produit.id, "produit": produit.nom, "quantite": 1, "prix": produit.prix, "total": produit.prix})
-            st.session_state.panier = panier
-            print(st.session_state.panier)
-
-
-    # st.success(f"{produit['nom']} a été ajouté au panier !")
+                st.success(f"{produit.nom} a été ajouté au panier !")

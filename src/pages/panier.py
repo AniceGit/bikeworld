@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from pages.sidebar import afficher_sidebar
 from src.tools.session import init_session
+from src.controllers.commande_controller import transformer_panier
 
 
 init_session()
@@ -11,13 +12,15 @@ st.title("Mon Panier")
 
 panier = st.session_state.panier
 
-if panier:
+if panier["total_panier"] == 0.00:
+    st.write("Votre panier est vide")
+else:
     st.write(f"Date: {panier["date_panier"]}")
 
     df_total = pd.DataFrame([{
         "Total du panier (€)": f"{panier["total_panier"]:.2f}",
     }])
-    
+
     df = pd.DataFrame([{
                 "Produit": produit_quantite["produit"],
                 "Quantité": produit_quantite["quantite"],
@@ -26,7 +29,7 @@ if panier:
             } for produit_quantite in panier["liste_produits_quantite"]])
 
     st.dataframe(df, column_config={
-#        "Produit": st.column_config.LinkColumn("Produit")
+    #        "Produit": st.column_config.LinkColumn("Produit")
         "Prix unitaire (€)": st.column_config.NumberColumn(format="euro"),
         "Total (€)": st.column_config.NumberColumn(format="euro")
     }, hide_index=True)
@@ -35,9 +38,9 @@ if panier:
         "Total du panier (€)": st.column_config.NumberColumn(format="euro"),
     }, hide_index=True)
 
-if st.button("Passer la commande"):
-    if not st.session_state["utilisateur"]:
-        st.switch_page("pages/connexion.py")
-    else:
-        pass
+    if st.button("Passer la commande"):
+        if not st.session_state["utilisateur"]:
+            st.switch_page("pages/connexion.py")
+        else:
+            pass
 
