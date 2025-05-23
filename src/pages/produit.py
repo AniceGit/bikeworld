@@ -26,7 +26,7 @@ with col1:
         st.write(f"<span style='font-size: 20px;'>**Spécifications Techniques**</span>:" ,unsafe_allow_html=True)
         st.write(f"{produit.spec_tech}")
         st.write(f"<span style='font-size: 20px;'>**Couleur**</span>: {produit.couleur}",unsafe_allow_html=True)
-        st.write(f"<span style='font-size: 20px;'>**Prix**</span>: {produit.prix}",unsafe_allow_html=True)
+        st.write(f"<span style='font-size: 20px;'>**Prix**</span>: {produit.prix:.2f}",unsafe_allow_html=True)
         st.write(f"<span style='font-size: 20px;'>**Stock**</span>: {produit.stock}",unsafe_allow_html=True)
         if st.button("Ajouter au panier", key=produit.id):
             panier = st.session_state.panier

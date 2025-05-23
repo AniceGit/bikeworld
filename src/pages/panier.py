@@ -15,10 +15,14 @@ panier = st.session_state.panier
 if panier["total_panier"] == 0.00:
     st.write("Votre panier est vide")
 else:
+    if panier["total_panier"] >= 1500.00:
+        panier["frais_livraison"] = 0.00
+
     st.write(f"Date: {panier["date_panier"]}")
 
     df_total = pd.DataFrame([{
-        "Total du panier (€)": f"{panier["total_panier"]:.2f}",
+        "Frais de livraison (€)": f"{panier["frais_livraison"]:.2f}",
+        "Total du panier (€)": f"{panier["total_panier"]+panier["frais_livraison"]:.2f}",
     }])
 
     df = pd.DataFrame([{
@@ -35,6 +39,7 @@ else:
     }, hide_index=True)
 
     st.dataframe(df_total, column_config={
+        "Frais de livraison (€)": st.column_config.NumberColumn(format="euro"),
         "Total du panier (€)": st.column_config.NumberColumn(format="euro"),
     }, hide_index=True)
 
