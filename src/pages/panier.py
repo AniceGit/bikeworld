@@ -42,5 +42,5 @@ else:
         if not st.session_state["utilisateur"]:
             st.switch_page("pages/connexion.py")
         else:
-            pass
+            transformer_panier()
 

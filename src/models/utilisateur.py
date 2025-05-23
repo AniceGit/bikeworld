@@ -28,3 +28,31 @@ class Utilisateur:
         self.password = password
         self.telephone = telephone
         self.adresse: Adresse = None
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nom": self.nom,
+            "prenom": self.prenom,
+            "email": self.email,
+            "password": self.password,
+            "telephone": self.telephone,
+            "adresse": self.adresse.to_dict() if self.adresse else None
+        }
+
+    
+def utilisateur_from_dict(data):
+    utilisateur = Utilisateur(
+        data["id"],
+        data["nom"],
+        data["prenom"],
+        data["email"],
+        data["password"],
+        data["telephone"]
+    )
+    if data.get("adresse"):
+        from models.adresse import adresse_from_dict
+        utilisateur.adresse = adresse_from_dict(data["adresse"])
+    return utilisateur
+
+
