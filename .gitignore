@@ -9,6 +9,9 @@ __pycache__/
 # Sqlite3
 *.db
 
+# Fichier de session
+utilisateur_session.json
+
 # Distribution / packaging
 .Python
 build/
