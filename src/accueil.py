@@ -15,6 +15,12 @@ def set_bg_image(image_file):
             background-repeat: no-repeat;
             background-attachment: fixed;
         }}
+        .custom-title {{
+            color: #000000;  
+        }}
+        .custom-write {{
+            color: #000000; 
+        }}
         </style>
         """,
         unsafe_allow_html=True
@@ -38,7 +44,7 @@ def afficher_accueil():
     init_session()
     afficher_sidebar()
 
-    st.title("BIKEWORLD!")
+    st.markdown('<h1 class="custom-title">BIKEWORLD</h1>',unsafe_allow_html=True)
     st.write("The ways of Bithume")
 
     if st.button("Voir mes commandes"):
