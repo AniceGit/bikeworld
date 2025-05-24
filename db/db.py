@@ -82,7 +82,8 @@ def init_db(data) -> None:
                 image TEXT NOT NULL,
                 prix REAL NOT NULL,
                 stock INTEGER NOT NULL,
-                ventes INTEGER NOT NULL
+                ventes INTEGER NOT NULL,
+                actif INTEGER NOT NULL
             )
         """
         )
@@ -205,8 +206,8 @@ def init_db(data) -> None:
 
         cur.executemany(
             """
-            INSERT INTO produit (nom, desc, spec_tech, couleur, image, prix, stock, ventes)
-                VALUES (:nom, :desc, :spec_tech, :couleur, :image, :prix, :stock, :ventes)
+            INSERT INTO produit (nom, desc, spec_tech, couleur, image, prix, stock, ventes, actif)
+                VALUES (:nom, :desc, :spec_tech, :couleur, :image, :prix, :stock, :ventes, :actif)
             """,
             produits,
         )

@@ -10,6 +10,7 @@ class Produit:
         prix: float,
         stock: int,
         ventes: int,
+        actif: int
     ) -> None:
         """Instanciation d'un Produit
 
@@ -23,6 +24,7 @@ class Produit:
             prix (float): prix unitaire du produit
             stock (int): Stock disponible du produit
             ventes (int): Nombre de ventes totales du produit
+            actif (int): Produit actif à la vente
         """
         self.id = id
         self.nom = nom
@@ -33,3 +35,4 @@ class Produit:
         self.prix = prix
         self.stock = stock
         self.ventes = ventes
+        self.actif = actif
