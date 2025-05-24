@@ -264,3 +264,6 @@ def sauvegarder_json_utilisateur(utilisateur: Utilisateur) -> None:
 # -----supprimer le json utilisateur qui sert à session-----#
 def supprimer_json_utilisateur() -> None:
     os.remove("db/utilisateur_session.json")
+
+
+

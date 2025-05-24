@@ -493,5 +493,70 @@
             "id_produit": 12,
             "id_commande": 3
         }
+    ],
+    "roles": [
+        {
+            "nom": "admin"
+        },
+        {
+            "nom": "superclient"
+        },
+        {
+            "nom": "client"
+        }
+    ],
+    "roles_utilisateur": [
+        {
+            "id_utilisateur": 1,
+            "id_role": 1
+        },
+        {
+            "id_utilisateur": 1,
+            "id_role": 2
+        },
+        {
+            "id_utilisateur": 1,
+            "id_role": 3
+        },
+        {
+            "id_utilisateur": 2,
+            "id_role": 1
+        },
+        {
+            "id_utilisateur": 2,
+            "id_role": 2
+        },
+        {
+            "id_utilisateur": 2,
+            "id_role": 3
+        },
+        {
+            "id_utilisateur": 3,
+            "id_role": 1
+        },
+        {
+            "id_utilisateur": 3,
+            "id_role": 2
+        },
+        {
+            "id_utilisateur": 3,
+            "id_role": 3
+        },
+        {
+            "id_utilisateur": 4,
+            "id_role": 2
+        },
+        {
+            "id_utilisateur": 5,
+            "id_role": 3
+        },
+        {
+            "id_utilisateur": 6,
+            "id_role": 3
+        },
+        {
+            "id_utilisateur": 7,
+            "id_role": 3
+        }
     ]
 }

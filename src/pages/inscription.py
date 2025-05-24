@@ -2,6 +2,9 @@ import streamlit as st
 import time
 from src.controllers.utilisateur_controller import inscrire_utilisateur
 from pages.sidebar import afficher_sidebar
+from src.tools.session import init_session
+
+init_session()
 
 afficher_sidebar()
 

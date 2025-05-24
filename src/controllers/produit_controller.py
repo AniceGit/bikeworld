@@ -5,6 +5,7 @@ from models.produit import Produit
 def get_produits() -> list[Produit]:
     # affiche tous les articles
 
+    lignes = []
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute(
@@ -25,12 +26,11 @@ def get_produits() -> list[Produit]:
         if result is None:
             raise Exception(f"Aucun articles")
 
-        lignes = []
         for id, nom, desc, spec_tech, couleur, image, prix, stock, ventes in result:
             lignes.append(
                 Produit(id, nom, desc, spec_tech, couleur, image, prix, stock, ventes)
             )
-        return lignes
+    return lignes
 
 
 # st.title("Liste des Produits")

@@ -3,6 +3,9 @@ from pages.sidebar import afficher_sidebar
 from tools.session import init_session
 from pages.bikeworld import afficher_produits_stars
 import base64
+from src.tools.session import init_session
+
+init_session()
 
 # Affichage wide forcé
 st.set_page_config(layout="wide")

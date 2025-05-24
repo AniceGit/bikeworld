@@ -3,6 +3,9 @@ import time
 from src.controllers.utilisateur_controller import connecter_utilisateur
 from pages.sidebar import afficher_sidebar
 import base64
+from src.tools.session import init_session
+
+init_session()
 
 afficher_sidebar()
 
@@ -65,6 +68,5 @@ def connexion_vue() -> None:
                 '<p class="custom-write">Veuillez saisir vos informations personnelles</p>',
                 unsafe_allow_html=True,
             )
-
 
 connexion_vue()

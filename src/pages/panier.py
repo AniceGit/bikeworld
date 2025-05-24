@@ -45,7 +45,6 @@ else:
     st.dataframe(
         df,
         column_config={
-            #        "Produit": st.column_config.LinkColumn("Produit")
             "Prix unitaire (€)": st.column_config.NumberColumn(format="euro"),
             "Total (€)": st.column_config.NumberColumn(format="euro"),
         },

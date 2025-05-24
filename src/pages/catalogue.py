@@ -3,7 +3,9 @@ from pages.sidebar import afficher_sidebar
 from controllers.produit_controller import get_produits
 from models.produit import Produit
 import base64
+from src.tools.session import init_session
 
+init_session()
 
 afficher_sidebar()
 

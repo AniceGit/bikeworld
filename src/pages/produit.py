@@ -64,7 +64,6 @@ with col1:
                                 produit_quantite["total"], 2
                             )
                             st.session_state.panier = panier
-                            print(st.session_state.panier)
                             st.success(f"{produit.nom} a été ajouté au panier !")
                             break
 
@@ -84,5 +83,4 @@ with col1:
                             }
                         )
                         st.session_state.panier = panier
-                        print(st.session_state.panier)
                         st.success(f"{produit.nom} a été ajouté au panier !")

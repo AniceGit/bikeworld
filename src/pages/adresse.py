@@ -3,6 +3,9 @@ import time
 from pages.sidebar import afficher_sidebar
 from models.utilisateur import Utilisateur
 from controllers.utilisateur_controller import creer_adresse
+from src.tools.session import init_session
+
+init_session()
 
 # Affichage sidebar et titre
 afficher_sidebar()

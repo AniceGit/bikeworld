@@ -1,7 +1,9 @@
 import streamlit as st
 from controllers.produit_controller import get_top_3_ventes
 from models.produit import Produit
+from src.tools.session import init_session
 
+init_session()
 
 def afficher_produits_stars() -> None:
     st.markdown("#")

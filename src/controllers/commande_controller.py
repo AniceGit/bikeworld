@@ -129,7 +129,7 @@ def calculer_total_commande(id_commande: int) -> float:
         return total_commande
 
 
-def get_commandes(id_utilisateur: int) -> list[Commande]:
+def get_commandes_by_utilisateur(id_utilisateur: int) -> list[Commande]:
 
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
@@ -261,9 +261,7 @@ def transformer_panier() -> None:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
-        print(
-            f"date_commande: {panier['date_panier']}, id_utilisateur: {st.session_state['utilisateur'].id}"
-        )
+        user = st.session_state["utilisateur"]
 
         # Insertion de la commande
         cur.execute(
@@ -283,8 +281,8 @@ def transformer_panier() -> None:
                 "frais_livraison": (
                     panier["frais_livraison"] if panier["total_panier"] < 1500 else 0.00
                 ),
-                "id_utilisateur": st.session_state["utilisateur"].id,
-                "id_adresse": st.session_state.utilisateur.adresse.id,
+                "id_utilisateur": user.id,
+                "id_adresse": user.adresse.id
             },
         )
 
@@ -293,10 +291,6 @@ def transformer_panier() -> None:
 
         # Insertion des lignes de commande
         for ligne in panier["liste_produits_quantite"]:
-
-            print(
-                f"commande: {cmd_id}, produit: {ligne['produit_id']}, quantite: {ligne['quantite']}, prix: {ligne['prix']}"
-            )
 
             cur.execute(
                 """
@@ -322,3 +316,89 @@ def transformer_panier() -> None:
             """,
                 {"quantite": ligne["quantite"], "id": ligne["produit_id"]},
             )
+
+
+def get_commandes() -> list[Commande]:
+
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+
+        # Récupération des commandes du client
+        cur.execute(
+            """
+            SELECT id, date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse
+            FROM commande
+        """)
+        entetes = cur.fetchall()
+
+        commandes = []
+
+        for (
+            id_commande,
+            date_commande,
+            etat,
+            prix_total,
+            frais_livrason,
+            id_utilisateur,
+            id_adresse,
+        ) in entetes:
+
+            # Récupération des lignes de commande de chaque commande
+            cur.execute(
+                """
+                SELECT id, quantite, prix, id_produit, id_commande
+                FROM produit_commande
+                WHERE id_commande = :id_commande
+            """,
+                {"id_commande": id_commande},
+            )
+            result_lignes = cur.fetchall()
+
+            lignes = []
+
+            for (
+                id_produit_commande,
+                quantite,
+                prix,
+                id_produit,
+                id_commande,
+            ) in result_lignes:
+                lignes.append(
+                    ProduitCommande(
+                        id=id_produit_commande,
+                        quantite=quantite,
+                        prix=prix,
+                        id_produit=id_produit,
+                        id_commande=id_commande,
+                    )
+                )
+
+            ma_commande = Commande(
+                id=id_commande,
+                date_commande=date_commande,
+                etat=etat,
+                prix_total=prix_total,
+                frais_livraison=frais_livrason,
+                id_utilisateur=id_utilisateur,
+                id_adresse=id_adresse,
+            )
+            ma_commande.liste_produit_commande = lignes
+            commandes.append(ma_commande)
+
+    return commandes
+
+
+def modifier_etat_commande(id_commande: int, etat: str) -> int | None:
+
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+
+        cur.execute(
+            """
+            UPDATE commande
+            SET etat = :etat
+            WHERE id = :id
+        """,
+            {"id": id_commande, "etat": etat},
+        )
+
