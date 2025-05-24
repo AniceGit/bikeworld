@@ -267,3 +267,32 @@ def supprimer_json_utilisateur() -> None:
 
 
 
+def get_utilisateur_by_id(id_utilisateur: int) -> Utilisateur | None:
+    """
+    Récupère un utilisateur dans la base de données à partir de son id.
+
+    Paramètres:
+    id_utilisateur (int): Identifiant de l'utilisateur à rechercher.
+
+    Retourne:
+    tuple: Un tuple contenant les informations de l'utilisateur si l'email est trouvé,
+           ou None si aucun utilisateur n'est trouvé avec cet email.
+    """
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+
+        cur.execute(
+                """
+                SELECT id, nom, prenom, email, password, telephone
+                FROM utilisateur
+                WHERE id = :id_utilisateur
+            """,
+                {"id_utilisateur": id_utilisateur}
+            )
+
+        result_utilisateur = cur.fetchone()
+
+        id, nom, prenom, email, password, telephone = result_utilisateur
+        utilisateur = Utilisateur(id, nom, prenom, email, password, telephone)
+
+        return utilisateur

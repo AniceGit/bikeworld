@@ -15,8 +15,8 @@ def afficher_sidebar() -> None:
         st.sidebar.page_link("pages/commandes.py", label="📦 Mes commandes")
         st.sidebar.page_link("pages/deconnexion.py", label="⏻ Se déconnecter")
         if st.session_state["utilisateur"].is_admin():
-            st.sidebar.text("ADMINISTRATION")
-            st.sidebar.page_link("pages/admin_commandes.py", label="Admin")
+            st.sidebar.text("ADMIN")
+            st.sidebar.page_link("pages/admin_commandes.py", label="Admin Commandes")
 
     st.sidebar.text("SHOP")
     st.sidebar.page_link("pages/catalogue.py", label="Catalogue")

@@ -2,6 +2,7 @@ import time
 import streamlit as st
 import pandas as pd
 from controllers.produit_controller import get_produit_nom_by_id
+from controllers.utilisateur_controller import get_utilisateur_by_id
 from pages.sidebar import afficher_sidebar
 from src.tools.session import init_session
 from src.controllers.commande_controller import get_adresse_commande, get_commandes, modifier_etat_commande, supprimer_commande
@@ -31,9 +32,11 @@ else:
 
     for cmd in commandes:
 
+        utilisateur = get_utilisateur_by_id(cmd.id_utilisateur)
         data.append(
             {
                 "ID": cmd.id,
+                "Client": f"{utilisateur.prenom} {utilisateur.nom}",
                 "Date": cmd.date_commande,
                 "Frais de livraison (€)": f"{cmd.frais_livraison:.2f}",
                 "Total (€)": f"{cmd.prix_total:.2f}",
