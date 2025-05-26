@@ -7,7 +7,8 @@ from controllers.utilisateur_controller import (
     sauvegarder_json_utilisateur,
     get_adresses_utilisateur,
     modifier_adresse_utilisateur,
-    supprimer_adresse_utilisateur
+    supprimer_adresse_utilisateur,
+    get_adresse_utilisateur_defaut
 )
 from tools.session import init_session
 import time
@@ -46,17 +47,29 @@ def profil_vue() -> None:
 
     # Récupération des infos de l'utilisateur connecté
     utilisateur: Utilisateur = st.session_state["utilisateur"]
-    adresse: Adresse = utilisateur.adresse
+    if utilisateur.adresse :
+        adresse: Adresse = utilisateur.adresse
+    else : 
+        adresse: Adresse = get_adresse_utilisateur_defaut(utilisateur)
 
     # Affichage du profil
-    st.write(f"Nom : {utilisateur.nom}")
-    st.write(f"Prénom : {utilisateur.prenom}")
-    st.write(f"Email : {utilisateur.email}")
-    st.write(f"Téléphone : {utilisateur.telephone}")
-    if adresse:
-        st.write(f"Adresse : {adresse.__str__()}")
-    else : 
-        st.write("Adresse : ")
+    # st.write(f"Nom : {utilisateur.nom}")
+    # st.write(f"Prénom : {utilisateur.prenom}")
+    # st.write(f"Email : {utilisateur.email}")
+    # st.write(f"Téléphone : {utilisateur.telephone}")
+    # if adresse:
+    #     st.write(f"Adresse : {adresse.__str__()}")
+    # else : 
+    #     st.write("Adresse : ")
+    st.markdown("### 👤 Informations ")
+
+    st.markdown(f"""
+     **Nom :** {utilisateur.nom}  
+     **Prénom :** {utilisateur.prenom}  
+     **Email :** {utilisateur.email}  
+     **Téléphone :** {utilisateur.telephone}  
+     **Adresse :** {adresse.__str__() if adresse else "Non renseignée"}
+    """)
 
     if "nom_key" not in st.session_state or st.session_state.nom_key == "":
         st.session_state.nom_key = utilisateur.nom
@@ -100,7 +113,7 @@ def profil_vue() -> None:
         button_delete_disabled = False
 
     # On affecte les valeurs insérées au nouvel utilisateur et on le modifie en db, session et json puis on refresh la page
-    if st.button("Modifier", disabled=button_disabled):
+    if st.button("💾 Modifier", disabled=button_disabled):
         nouvel_utilisateur = utilisateur
         nouvel_utilisateur.nom = nom if nom else utilisateur.nom
         nouvel_utilisateur.prenom = prenom if prenom else utilisateur.prenom
@@ -126,18 +139,8 @@ def profil_vue() -> None:
             time.sleep(2)
             st.switch_page("pages/profil.py")
 
-    if st.button("Ajouter une adresse"):
+    if st.button("📍 Adresse"):
         st.switch_page("pages/adresse.py")
-
-    if st.button("Supprimer adresse", disabled=button_delete_disabled):
-        id_adresse_a_supprimer = adresse_selectionnee.id
-        supprimer_adresse_utilisateur(id_adresse_a_supprimer, utilisateur)
-        nouvel_utilisateur = utilisateur
-        nouvel_utilisateur.adresse = None
-        sauvegarder_json_utilisateur(nouvel_utilisateur)
-        with st.spinner(text="Veuillez patienter", show_time=False):
-            time.sleep(2)
-            st.switch_page("pages/profil.py")
 
 profil_vue()
 

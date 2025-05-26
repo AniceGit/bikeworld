@@ -2,6 +2,7 @@ import sqlite3
 import streamlit as st
 from src.models.commande import Commande
 from src.models.adresse import Adresse
+from src.models.utilisateur import Utilisateur
 from src.models.produit_commande import ProduitCommande
 
 
@@ -290,7 +291,7 @@ def get_adresse_commande(id_adresse: int) -> Adresse | None:
     return adresse_commande
 
 
-def transformer_panier() -> None:
+def transformer_panier() -> bool:
     """
     Transformation du panier en commande.
 
@@ -304,8 +305,9 @@ def transformer_panier() -> None:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
-        user = st.session_state["utilisateur"]
-
+        user:Utilisateur = st.session_state["utilisateur"]
+        if user.adresse is None:
+            return False
         # Insertion de la commande
         cur.execute(
             """
@@ -359,6 +361,7 @@ def transformer_panier() -> None:
             """,
                 {"quantite": ligne["quantite"], "id": ligne["produit_id"]},
             )
+    return True
 
 
 def get_commandes() -> list[Commande]:

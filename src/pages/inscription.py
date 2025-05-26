@@ -36,7 +36,7 @@ def inscrire_vue() -> None:
     email = st.text_input("Email")
     mdp = st.text_input("Mot de passe")
 
-    if st.button("S'inscrire"):
+    if st.button("💾S'inscrire"):
         if nom and prenom and tel and email and mdp:
             if inscrire_utilisateur(nom, prenom, email, mdp, tel):
                 time.sleep(2)

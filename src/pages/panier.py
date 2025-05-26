@@ -96,7 +96,11 @@ else:
             if not st.session_state["utilisateur"]:
                 st.switch_page("pages/connexion.py")
             else:
-                transformer_panier()
+                if not transformer_panier():
+                    st.error("Veuillez renseigner une adresse par défaut")
+                    with st.spinner(text="Veuillez patienter", show_time=False):
+                        time.sleep(2)
+                    st.switch_page("pages/profil.py")
 
                 st.session_state.panier = Panier(str(datetime.date.today()), 0.0)
 

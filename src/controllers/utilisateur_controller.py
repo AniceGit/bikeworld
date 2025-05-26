@@ -145,6 +145,39 @@ def get_utilisateur_by_email(email: str) -> Utilisateur | None:
             return utilisateur
         return None
 
+def get_adresse_utilisateur_defaut(utilisateur:Utilisateur) -> Adresse | None:
+    """
+    Récupère un utilisateur à partir de son email depuis la base de données.
+
+    Args:
+        email (str): Email de l'utilisateur recherché.
+
+    Returns:
+        Utilisateur | None: Instance Utilisateur si trouvé, sinon None.
+    """
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT * FROM adresse WHERE id_utilisateur = :id_utilisateur AND defaut= :defaut AND active= :active",
+            {"id_utilisateur": utilisateur.id, "defaut": 1, "active":1},
+        )
+        result_adresse = cur.fetchone()
+        if result_adresse is not None:
+            adresse: Adresse = Adresse(
+                result_adresse[0],
+                result_adresse[1],
+                result_adresse[2],
+                result_adresse[3],
+                result_adresse[4],
+                result_adresse[5],
+                result_adresse[6],
+                result_adresse[7],
+                result_adresse[8],
+                result_adresse[9],
+            )
+            return adresse
+    return None
+
 
 # -----Récupérer les adresses d'un utilisateur-----#
 def get_adresses_utilisateur(id: int) -> list[Adresse]:
@@ -311,7 +344,6 @@ def supprimer_adresse_utilisateur(id_adresse:int, utilisateur:Utilisateur) -> bo
                 "id_adresse": id_adresse,
             },
         )
-        sauvegarder_json_utilisateur(utilisateur)
         st.success("Adresse supprimée avec succès !")
         return True
 
