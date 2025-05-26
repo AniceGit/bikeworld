@@ -98,19 +98,22 @@ else:
 
             # Actions disponibles si l'état de la commande est "Validée"
             if cmd.etat == "Validee":
-                if st.button(f"🗑️ Supprimer la commande {cmd.id}", key=f"supprimer_{cmd.id}"):
-                    supprimer_commande(cmd.id)
-                    with st.spinner(text="Veuillez patienter", show_time=False):
-                        st.success(f"Commande {cmd.id} supprimée.")
-                        time.sleep(2)
-                    st.switch_page("pages/admin_commandes.py")
-
-                if st.button(f"📑 Passer en préparation {cmd.id}", key=f"preparer_{cmd.id}"):
-                    modifier_etat_commande(cmd.id, "En preparation")
-                    with st.spinner(text="Veuillez patienter", show_time=False):
-                        st.success(f"Commande {cmd.id} en cours de préparation.")
-                        time.sleep(.2)
-                    st.switch_page("pages/admin_commandes.py")
+                colonnes = st.columns(2)
+                with colonnes[0]:
+                    if st.button(f"🗑️ Supprimer la commande {cmd.id}", key=f"supprimer_{cmd.id}"):
+                        supprimer_commande(cmd.id)
+                        with st.spinner(text="Veuillez patienter", show_time=False):
+                            st.success(f"Commande {cmd.id} supprimée.")
+                            time.sleep(2)
+                        st.switch_page("pages/admin_commandes.py")
+                
+                with colonnes[1]:
+                    if st.button(f"📑 Passer en préparation {cmd.id}", key=f"preparer_{cmd.id}"):
+                        modifier_etat_commande(cmd.id, "En preparation")
+                        with st.spinner(text="Veuillez patienter", show_time=False):
+                            st.success(f"Commande {cmd.id} en cours de préparation.")
+                            time.sleep(.2)
+                        st.switch_page("pages/admin_commandes.py")
 
             # Actions disponibles si l'état de la commande est "En préparation"
             if cmd.etat == "En preparation":

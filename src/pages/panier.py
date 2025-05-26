@@ -75,27 +75,31 @@ else:
     if selected_id:
         ligne_panier = next((produit_quantite for produit_quantite in panier.liste_produits_quantite if produit_quantite["produit"] == selected_id), None)
 
-    if st.button("Supprimer du panier"):
-        liste_panier = panier.liste_produits_quantite
-        liste_panier.remove(ligne_panier)
 
-        panier.total_panier = panier.recalculer_total_panier()
-        panier.frais_livraison = panier.get_frais_livraison()
+    colonnes = st.columns(2)
+    with colonnes[0]:
+        if st.button("🗑️ Supprimer du panier"):
+            liste_panier = panier.liste_produits_quantite
+            liste_panier.remove(ligne_panier)
 
-        with st.spinner(text="Veuillez patienter", show_time=False):
-            time.sleep(2)
-        st.switch_page("pages/panier.py")
-
-
-    # Transformation du panier en commande
-    if st.button("Passer la commande"):
-        if not st.session_state["utilisateur"]:
-            st.switch_page("pages/connexion.py")
-        else:
-            transformer_panier()
-
-            st.session_state.panier = Panier(str(datetime.date.today()), 0.0)
+            panier.total_panier = panier.recalculer_total_panier()
+            panier.frais_livraison = panier.get_frais_livraison()
 
             with st.spinner(text="Veuillez patienter", show_time=False):
                 time.sleep(2)
-            st.switch_page("pages/commandes.py")
+            st.switch_page("pages/panier.py")
+
+
+    # Transformation du panier en commande
+    with colonnes[1]:
+        if st.button("📑 Passer la commande"):
+            if not st.session_state["utilisateur"]:
+                st.switch_page("pages/connexion.py")
+            else:
+                transformer_panier()
+
+                st.session_state.panier = Panier(str(datetime.date.today()), 0.0)
+
+                with st.spinner(text="Veuillez patienter", show_time=False):
+                    time.sleep(2)
+                st.switch_page("pages/commandes.py")
