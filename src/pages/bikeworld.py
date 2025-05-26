@@ -8,41 +8,44 @@ init_session()
 def afficher_produits_stars() -> None:
     st.markdown("#")
     st.markdown(
-    "<h2 style='text-align: center; color: #ff7000; background-color: #000000;'>Top Ventes</h2>",
-    unsafe_allow_html=True
-)
-
+    "<h2 style='text-align: center; color: #f1ab00; background-color: #000000;'>Top Ventes</h2>",
+    unsafe_allow_html=True)
+    st.markdown("#")
     liste_top_ventes: list[Produit] = get_top_3_ventes()
 
     nb_colonnes = 3
     colonnes = st.columns(nb_colonnes)
 
-    # Parcourir les produits et le top 3 des ventes
+    # Fonction pour afficher l'image de stock
+    def afficher_image_stock(stock):
+        if stock >= 3:
+            return f"🟢  En stock : {produit.stock} disponibles"
+        elif stock == 0:
+            return f"🔴  Produit victime de son succès"
+        else:
+            return f"🟠   Bientôt en rupture de stock"
+        # Fonction pour afficher l'image de stock
+       
+
+        # Parcourir les produits et le top 3 des ventes
     for i, produit in enumerate(liste_top_ventes):
         column_index = i % nb_colonnes
     
         with colonnes[column_index]:
             if produit.image:
-                st.image(produit.image, use_container_width=True)
-
-                # Utiliser des colonnes pour aligner le nom et le bouton
+                # colonnes pour aligner le nom et le bouton
                 nom_col, button_col = st.columns([3, 1])
                 with nom_col:
                     st.markdown(
-                        f"""
-                        <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
-                            <p style='font-size: 20px; font-weight: bold; color: #ff7000; margin: 0;'>{produit.nom}</p>
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-                with button_col:
-                    if st.button("Détail", key=produit.id):
-                        st.session_state["produit"] = produit
-                        st.session_state["produit"] = produit
-                        st.switch_page("pages/produit.py")
-
-                # Afficher le prix en dessous
+                    f"""
+                    <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                        <p style='font-size: 19px; font-weight: bold; color: #f1ab00; margin: 0;'>{produit.nom}</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+                st.image(produit.image, use_container_width=True)
+                #with nom_col:
                 st.markdown(
                         f"""
                             <div style='background-color: #141312; padding: 1px; border-radius: 5px;'>
@@ -50,7 +53,21 @@ def afficher_produits_stars() -> None:
                             </div>
                             """,
                             unsafe_allow_html=True
+                )
+                with button_col:
+                    if st.button("Détail", key=produit.id):
+                        st.session_state["produit"] = produit
+                        st.switch_page("pages/produit.py")
+
+                st.markdown(
+                        f"""
+                        <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                            <p style='font-size: 20px; font-weight: bold; color: #f1ab00; margin: 0;'>{afficher_image_stock(produit.stock)}</p>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
                     )
+                st.markdown("#")
             else:
                 st.write("Aucune image disponible")
 

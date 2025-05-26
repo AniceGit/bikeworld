@@ -2,13 +2,51 @@ import streamlit as st
 from pages.sidebar import afficher_sidebar
 from controllers.produit_controller import get_details_produit
 from src.tools.session import init_session
-
+import base64
 
 init_session()
 afficher_sidebar()
 id = st.session_state["produit"].id
 produit = get_details_produit(id)
 
+def set_bg_image(image_file: str) -> None:
+    with open(image_file, "rb") as image:
+        encoded_string = base64.b64encode(image.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/{"png" if image_file.endswith(".png") else "jpg"};base64,{encoded_string}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        .custom-title {{
+            color: #000000;  
+        }}
+        .custom-write {{
+            color: #000000; 
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# Chemin vers votre image de fond
+image_file = "images/fond_detail.jpg"  # Remplacez par le chemin de votre image
+
+# Appliquer le fond d'écran
+set_bg_image(image_file)
+
+# Fonction pour afficher l'image de stock
+def afficher_image_stock(stock):
+    if stock >= 3:
+        return f"🟢  En stock : {produit.stock} disponibles"
+    elif stock == 0:
+        return f"🔴  Produit victime de son succès"
+    else:
+        return f"🟠   Bientôt en rupture de stock"
 
 st.title(produit.nom)
 
@@ -20,27 +58,32 @@ with col1:
         st.write("Aucune image disponible")
     with col2:
         st.write(
-            f"<span style='font-size: 20px;'>**Description**</span>:",
+            f"<span style='font-size: 21px; color: #f1ab00;'>**Description**</span>:",
             unsafe_allow_html=True,
         )
-        st.write(f"{produit.description}", unsafe_allow_html=True)
+        st.write(f"🚲  {produit.description}", unsafe_allow_html=True)
         st.write(
-            f"<span style='font-size: 20px;'>**Spécifications Techniques**</span>:",
+            f"<span style='font-size: 21px;color: #f1ab00'>**Spécifications Techniques**</span>:",
             unsafe_allow_html=True,
         )
-        st.write(f"{produit.spec_tech}")
+        st.write(f"🛠️ {produit.spec_tech}")
         st.write(
-            f"<span style='font-size: 20px;'>**Couleur**</span>: {produit.couleur}",
-            unsafe_allow_html=True,
-        )
-        st.write(
-            f"<span style='font-size: 20px;'>**Prix**</span>: {produit.prix:.2f}",
+            f"<span style='font-size: 21px;color: #f1ab00'>**Couleur**</span>: {produit.couleur}",
             unsafe_allow_html=True,
         )
         st.write(
-            f"<span style='font-size: 20px;'>**Stock**</span>: {produit.stock}",
+            f"<span style='font-size: 21px;color: #f1ab00'>**Prix**</span>: {produit.prix:.2f} €",
             unsafe_allow_html=True,
         )
+        st.markdown(
+                        f"""
+                        <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                            <p style='font-size: 20px; font-weight: bold; color: #f1ab00; margin: 0;'>{afficher_image_stock(produit.stock)}</p>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+        st.markdown("#")
         if st.button("Ajouter au panier", key=produit.id):
             panier = st.session_state.panier
             if panier:

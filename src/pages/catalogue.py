@@ -8,9 +8,8 @@ from src.tools.session import init_session
 init_session()
 
 afficher_sidebar()
-st.title("")
 st.markdown(
-    "<h2 style='text-align: center; color: #ff7000; background-color: #000000;'>Bienvenue sur la page des produits de BIKEWORLD!</h2>",
+    "<h2 style='text-align: center; color: #f1ab00; background-color: #000000;'>Bienvenue sur la page des produits de BIKEWORLD!</h2>",
     unsafe_allow_html=True
 )
 
@@ -50,25 +49,15 @@ liste_produits: list[Produit] = get_produits()
 nb_colonnes = 4
 colonnes = st.columns(nb_colonnes)
 
-# Fonction pour encoder une image en base64
-def encode_image_to_base64(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode('utf-8')
-    
-# Chemins vers les images de stock
-stock_vide = "images/red-circle.png"
-en_stock = "images/green-circle.png"
-
-# Encoder les images en base64
-stock_vide_encode= encode_image_to_base64(stock_vide)
-en_stock_encode= encode_image_to_base64(en_stock)
-
 # Fonction pour afficher l'image de stock
 def afficher_image_stock(stock):
     if stock >= 3:
-        return f"<img src='data:image/png;base64,{en_stock_encode}' width='20' height='20'/>   En stock"
+        return f"🟢  En stock : {produit.stock} disponibles"
+    elif stock == 0:
+        return f"🔴  Produit victime de son succès"
     else:
-        return f"<img src='data:image/png;base64,{stock_vide_encode}' width='20' height='20'/>   Produit victime de son succès"
+        return f"🟠   Bientôt en rupture de stock"
+    
 
 
 # Parcourir les produits et les afficher dans la grille
@@ -84,7 +73,7 @@ for i, produit in enumerate(liste_produits):
                     st.markdown(
                     f"""
                     <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
-                        <p style='font-size: 19px; font-weight: bold; color: #ff7000; margin: 0;'>{produit.nom}</p>
+                        <p style='font-size: 19px; font-weight: bold; color: #f1ab00; margin: 0;'>{produit.nom}</p>
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -107,7 +96,7 @@ for i, produit in enumerate(liste_produits):
                 st.markdown(
                         f"""
                         <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
-                            <p style='font-size: 20px; font-weight: bold; color: #ff7000; margin: 0;'>{afficher_image_stock(produit.stock)}</p>
+                            <p style='font-size: 20px; font-weight: bold; color: #f1ab00; margin: 0;'>{afficher_image_stock(produit.stock)}</p>
                         </div>
                         """,
                         unsafe_allow_html=True
