@@ -5,8 +5,16 @@ from src.models.adresse import Adresse
 from src.models.produit_commande import ProduitCommande
 
 
-def supprimer_commande(id_commande: int) -> int | None:
+def supprimer_commande(id_commande: int) -> None:
+    """
+    Supprime une commande avec son id dans la base de données.
 
+    Args:
+        id (int): Identifiant de la commande à supprimer
+
+    Returns:
+        None: 
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
@@ -93,7 +101,15 @@ def supprimer_commande(id_commande: int) -> int | None:
 
 
 def calculer_total_commande(id_commande: int) -> float:
+    """
+    Calcule le total de la commande
 
+    Args:
+        id (int): Identifiant de la commande
+
+    Returns:
+        float: montant total de la commande
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
@@ -129,8 +145,16 @@ def calculer_total_commande(id_commande: int) -> float:
         return total_commande
 
 
-def get_commandes_by_utilisateur(id_utilisateur: int) -> list[Commande]:
+def get_commandes_by_utilisateur(id_utilisateur: int) -> list[Commande] | None:
+    """
+    Récupère toutes les commandes de l'utilisateur passé en paramètre.
 
+    Args:
+        id (int): Identifiant de l'utilisateur
+
+    Returns:
+        list[Commande] | None : liste des commandes de l'utilisateur
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
@@ -203,7 +227,15 @@ def get_commandes_by_utilisateur(id_utilisateur: int) -> list[Commande]:
 
 
 def get_adresse_commande(id_adresse: int) -> Adresse | None:
+    """
+    Récupère l'adresse de la commande passée en paramètre.
 
+    Args:
+        id (int): Identifiant de la commande
+
+    Returns:
+        Adresse | None: adresse utilisée pour la commande
+    """
     adresse_commande = None
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
@@ -259,6 +291,14 @@ def get_adresse_commande(id_adresse: int) -> Adresse | None:
 
 
 def transformer_panier() -> None:
+    """
+    Transformation du panier en commande.
+
+    Args:
+
+    Returns:
+        None: 
+    """
     panier = st.session_state.panier
 
     with sqlite3.connect("bikeworld.db") as conn:
@@ -278,11 +318,11 @@ def transformer_panier() -> None:
                     :id_adresse)
         """,
             {
-                "date_commande": panier["date_panier"],
+                "date_commande": panier.date_panier,
                 "etat": "Validee",
-                "prix_total": panier["total_panier"],
+                "prix_total": panier.total_panier,
                 "frais_livraison": (
-                    panier["frais_livraison"] if panier["total_panier"] < 1500 else 0.00
+                    panier.frais_livraison if panier.total_panier < 1500 else 0.00
                 ),
                 "id_utilisateur": user.id,
                 "id_adresse": user.adresse.id
@@ -293,7 +333,7 @@ def transformer_panier() -> None:
         cmd_id = cur.lastrowid
 
         # Insertion des lignes de commande
-        for ligne in panier["liste_produits_quantite"]:
+        for ligne in panier.liste_produits_quantite:
 
             cur.execute(
                 """
@@ -310,7 +350,7 @@ def transformer_panier() -> None:
                     "prix": ligne["prix"],
                 },
             )
-
+            # Mise à jour du stock et des ventes du produit
             cur.execute(
                 """
                 UPDATE produit
@@ -322,7 +362,14 @@ def transformer_panier() -> None:
 
 
 def get_commandes() -> list[Commande]:
+    """
+    Récupération de toutes les commandes.
 
+    Args:
+
+    Returns:
+        list[Commande] | None: liste de toutes commandes (mode admin) 
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
@@ -392,7 +439,16 @@ def get_commandes() -> list[Commande]:
 
 
 def modifier_etat_commande(id_commande: int, etat: str) -> int | None:
+    """
+    Modification de l'état de la commande avec l'état passé en paramètre.
 
+    Args:
+        id (int): identifiant de la commande à modifier
+        etat (str): Nouvel état de la commande
+    
+    Returns:
+        
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
 
