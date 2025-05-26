@@ -7,8 +7,10 @@ from controllers.utilisateur_controller import (
     sauvegarder_json_utilisateur,
     get_adresses_utilisateur,
     modifier_adresse_utilisateur,
+    supprimer_adresse_utilisateur
 )
 from tools.session import init_session
+import time
 
 init_session()
 
@@ -25,7 +27,10 @@ st.write(f"Nom : {utilisateur.nom}")
 st.write(f"Prénom : {utilisateur.prenom}")
 st.write(f"Email : {utilisateur.email}")
 st.write(f"Téléphone : {utilisateur.telephone}")
-st.write(f"Adresse : {adresse.__str__()}")
+if adresse:
+    st.write(f"Adresse : {adresse.__str__()}")
+else : 
+    st.write("Adresse : ")
 
 if "nom_key" not in st.session_state or st.session_state.nom_key == "":
     st.session_state.nom_key = utilisateur.nom
@@ -53,6 +58,7 @@ option = st.selectbox(
 
 # Button disabled si pas d'adresse choisie et si adresse choisie alors button à None si aucun changement
 button_disabled = option == None
+button_delete_disabled = True
 if option is not None:
     adresse_selectionnee = next(
         (adresse for adresse in adresses if adresse.__str__() == option), None
@@ -62,9 +68,10 @@ if option is not None:
         and utilisateur.prenom == prenom
         and utilisateur.email == email
         and utilisateur.telephone == telephone
-        and adresse.id == adresse_selectionnee.id
+        and ((adresse == None and adresse_selectionnee.id == None) or (adresse and adresse.id == adresse_selectionnee.id))
     ):
         button_disabled = True
+    button_delete_disabled = False
 
 # On affecte les valeurs insérées au nouvel utilisateur et on le modifie en db, session et json puis on refresh la page
 if st.button("Modifier", disabled=button_disabled):
@@ -79,8 +86,9 @@ if st.button("Modifier", disabled=button_disabled):
     nouvelle_adresse.defaut = 1
     modifier_adresse_utilisateur(nouvelle_adresse)
     # On modifie la valeur défaut de l'adresse précédente (actuellement dans l'objet utilisateur) et on la modifie en db
-    adresse.defaut = 0
-    modifier_adresse_utilisateur(adresse)
+    if adresse :
+        adresse.defaut = 0
+        modifier_adresse_utilisateur(adresse)
 
     # On affecte l'adresse sélectionnée à l'objet nouvel_utilisateur qu'on sauvegardera en db, session et json
     nouvel_utilisateur.adresse = nouvelle_adresse
@@ -88,7 +96,22 @@ if st.button("Modifier", disabled=button_disabled):
     modifier_utilisateur(nouvel_utilisateur)
     st.session_state["utilisateur"] = nouvel_utilisateur
     sauvegarder_json_utilisateur(nouvel_utilisateur)
-    st.switch_page("pages/profil.py")
+    with st.spinner(text="Veuillez patienter", show_time=False):
+        time.sleep(2)
+        st.switch_page("pages/profil.py")
 
 if st.button("Ajouter une adresse"):
     st.switch_page("pages/adresse.py")
+
+if st.button("Supprimer adresse", disabled=button_delete_disabled):
+    id_adresse_a_supprimer = adresse_selectionnee.id
+    supprimer_adresse_utilisateur(id_adresse_a_supprimer, utilisateur)
+    nouvel_utilisateur = utilisateur
+    nouvel_utilisateur.adresse = None
+    sauvegarder_json_utilisateur(nouvel_utilisateur)
+    with st.spinner(text="Veuillez patienter", show_time=False):
+        time.sleep(2)
+        st.switch_page("pages/profil.py")
+
+
+

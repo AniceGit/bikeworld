@@ -111,8 +111,8 @@ def get_utilisateur_by_email(email: str) -> Utilisateur | None:
             )
 
             cur.execute(
-                "SELECT * FROM adresse WHERE id_utilisateur = :id_utilisateur AND defaut= :defaut",
-                {"id_utilisateur": utilisateur.id, "defaut": 1},
+                "SELECT * FROM adresse WHERE id_utilisateur = :id_utilisateur AND defaut= :defaut AND active= :active",
+                {"id_utilisateur": utilisateur.id, "defaut": 1, "active":1},
             )
             result_adresse = cur.fetchone()
             if result_adresse:
@@ -126,6 +126,7 @@ def get_utilisateur_by_email(email: str) -> Utilisateur | None:
                     result_adresse[6],
                     result_adresse[7],
                     result_adresse[8],
+                    result_adresse[9],
                 )
                 utilisateur.adresse = adresse
             return utilisateur
@@ -136,7 +137,7 @@ def get_utilisateur_by_email(email: str) -> Utilisateur | None:
 def get_adresses_utilisateur(id: int) -> list[Adresse]:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
-        cur.execute("SELECT * FROM adresse WHERE id_utilisateur = :id", {"id": id})
+        cur.execute("SELECT * FROM adresse WHERE id_utilisateur = :id and active = :active", {"id": id, "active": 1})
         result_adresses = cur.fetchall()
         if result_adresses is None:
             raise Exception(f"Aucune adresse")
@@ -151,6 +152,7 @@ def get_adresses_utilisateur(id: int) -> list[Adresse]:
             ville,
             pays,
             defaut,
+            active,
             id_utilisateur,
         ) in result_adresses:
             adresses.append(
@@ -163,12 +165,13 @@ def get_adresses_utilisateur(id: int) -> list[Adresse]:
                     ville,
                     pays,
                     defaut,
+                    active,
                     id_utilisateur,
                 )
             )
         return adresses
 
-
+# -----Créer adresse-----#
 def creer_adresse(
     numero: str,
     type_voie: str,
@@ -177,14 +180,15 @@ def creer_adresse(
     ville: str,
     pays: str,
     defaut: int,
+    active: int,
     id_utilisateur: int,
 ) -> bool:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute(
             """
-            INSERT INTO adresse (numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur)
-            VALUES (:numero, :type_voie, :nom_voie, :code_postal, :ville, :pays, :defaut, :id_utilisateur)
+            INSERT INTO adresse (numero, type_voie, nom_voie, code_postal, ville, pays, defaut, active, id_utilisateur)
+            VALUES (:numero, :type_voie, :nom_voie, :code_postal, :ville, :pays, :defaut, :active, :id_utilisateur)
         """,
             {
                 "numero": numero,
@@ -194,6 +198,7 @@ def creer_adresse(
                 "ville": ville,
                 "pays": pays,
                 "defaut": defaut,
+                "active": active,
                 "id_utilisateur": id_utilisateur,
             },
         )
@@ -206,7 +211,7 @@ def modifier_adresse_utilisateur(nouvelle_adresse: Adresse) -> None:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute(
-            """UPDATE adresse SET numero = :numero, type_voie = :type_voie, nom_voie = :nom_voie, code_postal = :code_postal, ville = :ville, pays = :pays, defaut = :defaut WHERE id = :id_adresse
+            """UPDATE adresse SET numero = :numero, type_voie = :type_voie, nom_voie = :nom_voie, code_postal = :code_postal, ville = :ville, pays = :pays, defaut = :defaut, active = :active WHERE id = :id_adresse
                     """,
             {
                 "numero": nouvelle_adresse.numero,
@@ -216,13 +221,31 @@ def modifier_adresse_utilisateur(nouvelle_adresse: Adresse) -> None:
                 "ville": nouvelle_adresse.ville,
                 "pays": nouvelle_adresse.pays,
                 "defaut": nouvelle_adresse.defaut,
+                "active": nouvelle_adresse.active,
                 "id_adresse": nouvelle_adresse.id,
             },
         )
 
+# -----Supprimer adresse-----#
+def supprimer_adresse_utilisateur(id_adresse:int, utilisateur:Utilisateur) -> bool:
+    with sqlite3.connect("bikeworld.db") as conn:
+        cur = conn.cursor()
+        cur.execute(
+            """UPDATE adresse SET defaut = :defaut, active = :active WHERE id = :id_adresse
+                    """,
+            {
+                "defaut":0,
+                "active":0,
+                "id_adresse": id_adresse,
+            },
+        )
+        sauvegarder_json_utilisateur(utilisateur)
+        st.success("Adresse supprimée avec succès !")
+        return True
+
 
 # -----modification de l'utilisateur-----#
-def modifier_utilisateur(nouvel_utilisateur: Utilisateur) -> None:
+def modifier_utilisateur(nouvel_utilisateur: Utilisateur) -> bool:
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute(
@@ -237,6 +260,8 @@ def modifier_utilisateur(nouvel_utilisateur: Utilisateur) -> None:
             },
         )
         sauvegarder_json_utilisateur(nouvel_utilisateur)
+        st.success("Utilisateur modifié avec succès !")
+        return True
 
 
 # -----déconnexion de l'utilisateur-----#

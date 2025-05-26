@@ -9,6 +9,7 @@ class Adresse:
         ville: str,
         pays: str,
         defaut: int,
+        active: int,
         id_utilisateur: int,
     ) -> None:
         """Instanciation d'une Adresse
@@ -32,6 +33,7 @@ class Adresse:
         self.ville = ville
         self.pays = pays
         self.defaut = defaut
+        self.active = active
         self.id_utilisateur = id_utilisateur
 
     def to_dict(self) -> dict:
@@ -44,6 +46,7 @@ class Adresse:
             "ville": self.ville,
             "pays": self.pays,
             "defaut": self.defaut,
+            "active": self.active,
             "id_utilisateur": self.id_utilisateur,
         }
 
@@ -62,5 +65,6 @@ def adresse_from_dict(data: dict) -> Adresse:
         ville=data["ville"],
         pays=data["pays"],
         defaut=data["defaut"],
+        active=data["active"],
         id_utilisateur=data["id_utilisateur"],
     )
