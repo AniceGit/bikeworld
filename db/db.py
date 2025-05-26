@@ -56,6 +56,7 @@ def init_db(data) -> None:
                 ville TEXT NOT NULL,
                 pays TEXT NOT NULL,
                 defaut INTEGER NOT NULL,
+                active INTEGER NOT NULL,
                 id_utilisateur INTEGER NOT NULL,
                 FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id)
             )
@@ -81,7 +82,9 @@ def init_db(data) -> None:
                 couleur TEXT NOT NULL,
                 image TEXT NOT NULL,
                 prix REAL NOT NULL,
-                stock INTEGER NOT NULL
+                stock INTEGER NOT NULL,
+                ventes INTEGER NOT NULL,
+                actif INTEGER NOT NULL
             )
         """
         )
@@ -99,7 +102,7 @@ def init_db(data) -> None:
             """
             CREATE TABLE IF NOT EXISTS commande (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                date TEXT NOT NULL,
+                date_commande TEXT NOT NULL,
                 etat TEXT NOT NULL,
                 prix_total REAL NOT NULL,
                 frais_livraison REAL NOT NULL,
@@ -134,6 +137,46 @@ def init_db(data) -> None:
         """
         )
 
+        # destruction de la table des roles existante
+        print("Creation de la table roles")
+        cur.execute(
+            """
+            DROP TABLE IF EXISTS roles
+        """
+        )
+
+        # creation de la table des roles
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS roles (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nom TEXT NOT NULL
+            )
+        """
+        )
+
+        # destruction de la table des roles_utilisateur existante
+        print("Creation de la table roles_utilisateur")
+        cur.execute(
+            """
+            DROP TABLE IF EXISTS roles_utilisateur
+        """
+        )
+
+        # creation de la table des roles_utilisateur
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS roles_utilisateur (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id_utilisateur INTEGER NOT NULL,
+                id_role INTEGER NOT NULL,
+                FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id)
+                FOREIGN KEY (id_role) REFERENCES role(id)
+            )
+        """
+        )
+
+
         print(f"Population de la table utilisateur")
         # Boucle pour insert les utilisateurs du fichier data.json
         utilisateurs = data.get("utilisateur")
@@ -152,8 +195,8 @@ def init_db(data) -> None:
 
         cur.executemany(
             """
-            INSERT INTO adresse (numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur)
-                VALUES (:numero, :type_voie, :nom_voie, :code_postal, :ville, :pays, :defaut, :id_utilisateur)
+            INSERT INTO adresse (numero, type_voie, nom_voie, code_postal, ville, pays, defaut, active, id_utilisateur)
+                VALUES (:numero, :type_voie, :nom_voie, :code_postal, :ville, :pays, :defaut, :active, :id_utilisateur)
             """,
             adresses,
         )
@@ -164,8 +207,8 @@ def init_db(data) -> None:
 
         cur.executemany(
             """
-            INSERT INTO produit (nom, desc, spec_tech, couleur, image, prix, stock)
-                VALUES (:nom, :desc, :spec_tech, :couleur, :image, :prix, :stock)
+            INSERT INTO produit (nom, desc, spec_tech, couleur, image, prix, stock, ventes, actif)
+                VALUES (:nom, :desc, :spec_tech, :couleur, :image, :prix, :stock, :ventes, :actif)
             """,
             produits,
         )
@@ -176,8 +219,8 @@ def init_db(data) -> None:
 
         cur.executemany(
             """
-            INSERT INTO commande (date, etat, prix_total, frais_livraison, id_utilisateur, id_adresse)
-                VALUES (:date, :etat, :prix_total, :frais_livraison, :id_utilisateur, :id_adresse)
+            INSERT INTO commande (date_commande, etat, prix_total, frais_livraison, id_utilisateur, id_adresse)
+                VALUES (:date_commande, :etat, :prix_total, :frais_livraison, :id_utilisateur, :id_adresse)
             """,
             commandes,
         )
@@ -194,6 +237,29 @@ def init_db(data) -> None:
             produit_commandes,
         )
 
+        print(f"Population de la table roles")
+        # Boucle pour insert les roles du fichier data.json
+        roles = data.get("roles")
+
+        cur.executemany(
+            """
+            INSERT INTO roles (nom)
+                VALUES (:nom)
+            """,
+            roles,
+        )
+
+        print(f"Population de la table roles_utilisateur")
+        # Boucle pour insert les roles_utilisateur du fichier data.json
+        roles_utilisateur = data.get("roles_utilisateur")
+
+        cur.executemany(
+            """
+            INSERT INTO roles_utilisateur (id_utilisateur, id_role)
+                VALUES (:id_utilisateur, :id_role)
+            """,
+            roles_utilisateur,
+        )
 
 def lirejson(fichier: str) -> dict:
     """Lecture du fichier JSON contenant les données
@@ -205,7 +271,7 @@ def lirejson(fichier: str) -> dict:
         dict: contenu du fichier de données sous forme de dictionnaire
     """
     data = {}
-    with open(fichier, "r") as fic:
+    with open(fichier, "r", encoding="utf-8") as fic:
         data = json.load(fic)
 
     return data
@@ -214,6 +280,6 @@ def lirejson(fichier: str) -> dict:
 entree = input(
     "Attention! Ce script va reinitialiser la base de donnees. Continuer (O/N)"
 )
-if entree == "O":
+if entree.upper() == "O":
     data = lirejson("db/data.json")
     init_db(data)
