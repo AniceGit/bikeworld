@@ -13,6 +13,7 @@ st.title("Mon Panier")
 
 panier = st.session_state.panier
 
+
 if panier["total_panier"] == 0.00:
     st.write("Votre panier est vide")
 else:
@@ -59,6 +60,29 @@ else:
         },
         hide_index=True,
     )
+
+    ligne_panier = [produit_quantite["produit"] for produit_quantite in panier["liste_produits_quantite"]]
+    selected_id = st.selectbox("Sélectionner un produit à supprimer :", ligne_panier)
+
+    if selected_id:
+        ligne_panier = next((produit_quantite for produit_quantite in panier["liste_produits_quantite"] if produit_quantite["produit"] == selected_id), None)
+
+    if st.button("Supprimer du panier"):
+        liste_panier = panier['liste_produits_quantite']
+        liste_panier.remove(ligne_panier)
+
+        total_panier = 0
+        for item in panier["liste_produits_quantite"]:
+            total_panier += item["quantite"] * item["prix"]
+        if total_panier < 1500:
+            panier['frais_livraison'] = 25
+
+        panier['total_panier'] = total_panier
+
+        with st.spinner(text="Veuillez patienter", show_time=False):
+            time.sleep(2)
+        st.switch_page("pages/panier.py")
+
 
     if st.button("Passer la commande"):
         if not st.session_state["utilisateur"]:
