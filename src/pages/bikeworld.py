@@ -31,6 +31,7 @@ def afficher_produits_stars() -> None:
     for i, produit in enumerate(liste_top_ventes):
         column_index = i % nb_colonnes
     
+ 
         with colonnes[column_index]:
             if produit.image:
                 # colonnes pour aligner le nom et le bouton

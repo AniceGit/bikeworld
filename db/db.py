@@ -56,6 +56,7 @@ def init_db(data) -> None:
                 ville TEXT NOT NULL,
                 pays TEXT NOT NULL,
                 defaut INTEGER NOT NULL,
+                active INTEGER NOT NULL,
                 id_utilisateur INTEGER NOT NULL,
                 FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id)
             )
@@ -194,8 +195,8 @@ def init_db(data) -> None:
 
         cur.executemany(
             """
-            INSERT INTO adresse (numero, type_voie, nom_voie, code_postal, ville, pays, defaut, id_utilisateur)
-                VALUES (:numero, :type_voie, :nom_voie, :code_postal, :ville, :pays, :defaut, :id_utilisateur)
+            INSERT INTO adresse (numero, type_voie, nom_voie, code_postal, ville, pays, defaut, active, id_utilisateur)
+                VALUES (:numero, :type_voie, :nom_voie, :code_postal, :ville, :pays, :defaut, :active, :id_utilisateur)
             """,
             adresses,
         )

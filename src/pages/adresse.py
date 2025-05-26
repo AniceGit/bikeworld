@@ -28,7 +28,7 @@ pays = st.text_input("Pays")
 if st.button("Ajouter"):
     if numero and type_voie and nom_voie and code_postal and ville and pays:
         if creer_adresse(
-            numero, type_voie, nom_voie, code_postal, ville, pays, 0, utilisateur.id
+            numero, type_voie, nom_voie, code_postal, ville, pays, 0, 1, utilisateur.id
         ):
             with st.spinner(text="Veuillez patienter", show_time=False):
                 time.sleep(2)
