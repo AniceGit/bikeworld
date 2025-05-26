@@ -53,7 +53,7 @@ else:
     selected_id = st.selectbox("Sélectionner une commande :", commande_ids)
 
     if selected_id:
-        cmd = next((c for c in commandes if c.id == selected_id), None)
+        cmd = next((com for com in commandes if com.id == selected_id), None)
         if cmd:
             st.subheader(f"🧾 Détails de la commande {cmd.id}")
             st.write(f"Date : {cmd.date_commande}")
@@ -65,12 +65,12 @@ else:
             ligne_df = pd.DataFrame(
                 [
                     {
-                        "Produit": get_produit_nom_by_id(l.id_produit),
-                        "Quantité": l.quantite,
-                        "Prix unitaire (€)": f"{l.prix:.2f}",
-                        "Total (€)": f"{l.quantite * l.prix :.2f}",
+                        "Produit": get_produit_nom_by_id(lig.id_produit),
+                        "Quantité": lig.quantite,
+                        "Prix unitaire (€)": f"{lig.prix:.2f}",
+                        "Total (€)": f"{lig.quantite * lig.prix :.2f}",
                     }
-                    for l in cmd.liste_produit_commande
+                    for lig in cmd.liste_produit_commande
                 ]
             )
 

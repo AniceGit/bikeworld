@@ -24,6 +24,6 @@ def init_session() -> None:
         st.session_state.panier = {
             "date_panier": str(datetime.date.today()),
             "total_panier": 0.0,
-            "frais_livraison": 20.0,
+            "frais_livraison": 25.0,
             "liste_produits_quantite": []
         }
