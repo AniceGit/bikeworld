@@ -84,7 +84,7 @@ def connexion_vue() -> None:
     email = st.text_input("Email")
     mdp = st.text_input("Mot de passe")
 
-    if st.button("Se connecter"):
+    if st.button("⏻ Se connecter"):
         if email and mdp:
             if connecter_utilisateur(email, mdp):
                 with st.spinner(text="Veuillez patienter", show_time=False):
