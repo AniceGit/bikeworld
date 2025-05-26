@@ -2,7 +2,8 @@ import streamlit as st
 import json, os, datetime
 from models.utilisateur import utilisateur_from_dict
 
-def init_session():
+
+def init_session() -> None:
     if "utilisateur" not in st.session_state:
         if os.path.exists("db/utilisateur_session.json"):
             try:

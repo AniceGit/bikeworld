@@ -3,10 +3,14 @@ import time
 from src.controllers.utilisateur_controller import connecter_utilisateur
 from pages.sidebar import afficher_sidebar
 import base64
+from src.tools.session import init_session
+
+init_session()
 
 afficher_sidebar()
 
-def set_bg_image(image_file):
+
+def set_bg_image(image_file: str) -> None:
     with open(image_file, "rb") as image:
         encoded_string = base64.b64encode(image.read()).decode()
     st.markdown(
@@ -30,8 +34,9 @@ def set_bg_image(image_file):
         }}
         </style>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
+
 
 # Chemin vers votre image de fond
 image_file = "images/fond_velo_noir.jpg"  # Remplacez par le chemin de votre image
@@ -40,9 +45,13 @@ image_file = "images/fond_velo_noir.jpg"  # Remplacez par le chemin de votre ima
 set_bg_image(image_file)
 
 st.markdown('<h1 class="custom-title">Page de Connexion</h1>', unsafe_allow_html=True)
-st.markdown('<p class="custom-write">Bienvenue sur la page de connexion de BIKEWORLD!</p>', unsafe_allow_html=True)
+st.markdown(
+    '<p class="custom-write">Bienvenue sur la page de connexion de BIKEWORLD!</p>',
+    unsafe_allow_html=True,
+)
 
-def connexion_vue():
+
+def connexion_vue() -> None:
     st.markdown('<p class="custom-write">Connexion</p>', unsafe_allow_html=True)
 
     email = st.text_input("Email")
@@ -54,7 +63,10 @@ def connexion_vue():
                 with st.spinner(text="Veuillez patienter", show_time=False):
                     time.sleep(2)
                 st.switch_page("accueil.py")
-        else :
-            st.markdown('<p class="custom-write">Veuillez saisir vos informations personnelles</p>', unsafe_allow_html=True)
+        else:
+            st.markdown(
+                '<p class="custom-write">Veuillez saisir vos informations personnelles</p>',
+                unsafe_allow_html=True,
+            )
 
 connexion_vue()

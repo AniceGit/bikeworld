@@ -3,8 +3,9 @@ from pages.sidebar import afficher_sidebar
 from controllers.produit_controller import get_produits
 from models.produit import Produit
 import base64
+from src.tools.session import init_session
 
-
+init_session()
 
 afficher_sidebar()
 st.title("")
@@ -14,7 +15,8 @@ st.markdown(
 )
 
 
-def set_bg_image(image_file):
+
+def set_bg_image(image_file: str) -> None:
     with open(image_file, "rb") as image:
         encoded_string = base64.b64encode(image.read()).decode()
     st.markdown(
@@ -35,8 +37,9 @@ def set_bg_image(image_file):
         }}
         </style>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
+
 
 # Chemin vers votre image de fond
 image_file = "images/catalogue_background.jpg"  # Remplacez par le chemin de votre image
@@ -44,7 +47,7 @@ image_file = "images/catalogue_background.jpg"  # Remplacez par le chemin de vot
 # Appliquer le fond d'écran
 set_bg_image(image_file)
 
-liste_produits:list[Produit] = get_produits()
+liste_produits: list[Produit] = get_produits()
 
 # Définir le nombre de colonnes pour la grille
 nb_colonnes = 4

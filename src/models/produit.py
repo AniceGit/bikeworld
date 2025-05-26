@@ -1,16 +1,18 @@
-class Produit():
-    def __init__(self,
-                 id: int,
-                 nom: str,
-                 description: str,
-                 spec_tech: str,
-                 couleur: str,
-                 image: str,
-                 prix: float,
-                 stock: int,
-                 ventes: int
+class Produit:
+    def __init__(
+        self,
+        id: int,
+        nom: str,
+        description: str,
+        spec_tech: str,
+        couleur: str,
+        image: str,
+        prix: float,
+        stock: int,
+        ventes: int,
+        actif: int
     ) -> None:
-        """ Instanciation d'un Produit
+        """Instanciation d'un Produit
 
         Args:
             id (int): identifiant du produit
@@ -22,6 +24,7 @@ class Produit():
             prix (float): prix unitaire du produit
             stock (int): Stock disponible du produit
             ventes (int): Nombre de ventes totales du produit
+            actif (int): Produit actif à la vente
         """
         self.id = id
         self.nom = nom
@@ -32,3 +35,4 @@ class Produit():
         self.prix = prix
         self.stock = stock
         self.ventes = ventes
+        self.actif = actif
