@@ -12,18 +12,23 @@ class Adresse:
         active: int,
         id_utilisateur: int,
     ) -> None:
-        """Instanciation d'une Adresse
+        """
+        Initialise une instance de la classe Adresse.
 
         Args:
-            id (int): identifiant de l'adresse (pk)
-            numero (str): Numéro de rue
-            type_voie (str): Type de voie
-            nom_voie (str): Nom de la voie
-            code_postal (str): Code postal
-            ville (str): Ville
-            pays (str): Pays
-            defaut (int): Adresse par défaut de l'utilisateur
-            id_utilisateur (int): identifiant utilisateur (fk)
+            id (int): Identifiant unique de l'adresse (clé primaire).
+            numero (str): Numéro de la rue.
+            type_voie (str): Type de la voie (exemple : "rue", "avenue", "boulevard").
+            nom_voie (str): Nom de la voie.
+            code_postal (str): Code postal associé à l'adresse.
+            ville (str): Ville de l'adresse.
+            pays (str): Pays de l'adresse.
+            defaut (int): Indicateur si l'adresse est l'adresse par défaut de l'utilisateur (1 = oui, 0 = non).
+            active (int): Indicateur si l'adresse est active (1 = oui, 0 = non).
+            id_utilisateur (int): Identifiant de l'utilisateur propriétaire de l'adresse (clé étrangère).
+
+        Returns:
+            None
         """
         self.id = id
         self.numero = numero
@@ -37,6 +42,12 @@ class Adresse:
         self.id_utilisateur = id_utilisateur
 
     def to_dict(self) -> dict:
+        """
+        Convertit l'objet Adresse en dictionnaire.
+
+        Returns:
+            dict: Un dictionnaire représentant l'adresse avec ses attributs.
+        """
         return {
             "id": self.id,
             "numero": self.numero,
@@ -51,11 +62,26 @@ class Adresse:
         }
 
     def __str__(self) -> str:
+        """
+        Retourne une représentation lisible de l'adresse.
+
+        Returns:
+            str: Une chaîne formatée décrivant l'adresse complète.
+        """
         adresse_to_str = f"{self.numero} {self.type_voie} {self.nom_voie} - {self.code_postal} {self.ville} - {self.pays}"
         return adresse_to_str
 
 
 def adresse_from_dict(data: dict) -> Adresse:
+    """
+    Crée une instance de la classe Adresse à partir d'un dictionnaire.
+
+    Args:
+        data (dict): Dictionnaire contenant les données d'une adresse avec les clés attendues.
+
+    Returns:
+        Adresse: Une instance de la classe Adresse initialisée avec les données fournies.
+    """
     return Adresse(
         id=data["id"],
         numero=data["numero"],

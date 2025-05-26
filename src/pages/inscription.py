@@ -13,6 +13,21 @@ st.write("Bienvenue sur la page d'insciption de BIKEWORLD!")
 
 
 def inscrire_vue() -> None:
+    """
+    Affiche le formulaire d'inscription pour un nouvel utilisateur.
+
+    Permet à l'utilisateur de saisir son nom, prénom, téléphone, email et mot de passe.
+    Vérifie que tous les champs sont remplis avant d'appeler la fonction d'inscription.
+    En cas de succès, attend 2 secondes puis redirige vers la page de connexion.
+    Affiche un message d'erreur si des informations sont manquantes.
+
+    Returns:
+        None
+
+    Effets de bord:
+        Affiche des éléments UI dans Streamlit.
+        Appelle la fonction `inscrire_utilisateur` qui affiche elle-même des messages de succès ou d'erreur.
+    """
     st.header("Inscription")
 
     nom = st.text_input("Nom")

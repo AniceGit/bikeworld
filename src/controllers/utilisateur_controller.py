@@ -10,17 +10,20 @@ def inscrire_utilisateur(
     nom: str, prenom: str, email: str, password: str, telephone: str
 ) -> bool:
     """
-    Permet d'inscrire un nouvel utilisateur. Vérifie si l'email existe déjà dans la base de données,
-    et crée un utilisateur si l'email est disponible.
+    Inscrit un nouvel utilisateur si l'email n'existe pas déjà dans la base.
 
-    Paramètres:
-    nom (str): Le nom de l'utilisateur.
-    prenom (str): Le prénom de l'utilisateur.
-    email (str): L'email de l'utilisateur (doit être unique).
-    password (str): Le mot de passe de l'utilisateur.
-    telephone (str): Le numéro de téléphone de l'utilisateur.
+    Args:
+        nom (str): Nom de l'utilisateur.
+        prenom (str): Prénom de l'utilisateur.
+        email (str): Email unique de l'utilisateur.
+        password (str): Mot de passe de l'utilisateur.
+        telephone (str): Numéro de téléphone de l'utilisateur.
 
-    Affiche un message de succès ou d'erreur via Streamlit.
+    Returns:
+        bool: True si l'inscription a réussi, False si l'email est déjà utilisé.
+
+    Effets de bord:
+        Affiche un message d'erreur ou de succès via Streamlit.
     """
     utilisateur = get_utilisateur_by_email(email)
     if utilisateur:
@@ -36,14 +39,20 @@ def creer_utilisateur(
     nom: str, prenom: str, email: str, password: str, telephone: str
 ) -> None:
     """
-    Crée un utilisateur dans la base de données SQLite en insérant ses informations dans la table 'utilisateur'.
+    Insère un nouvel utilisateur dans la base SQLite.
 
-    Paramètres:
-    nom (str): Le nom de l'utilisateur.
-    prenom (str): Le prénom de l'utilisateur.
-    email (str): L'email de l'utilisateur.
-    password (str): Le mot de passe de l'utilisateur.
-    telephone (str): Le numéro de téléphone de l'utilisateur.
+    Args:
+        nom (str): Nom de l'utilisateur.
+        prenom (str): Prénom de l'utilisateur.
+        email (str): Email de l'utilisateur.
+        password (str): Mot de passe de l'utilisateur.
+        telephone (str): Numéro de téléphone de l'utilisateur.
+
+    Returns:
+        None
+
+    Effets de bord:
+        Insère une nouvelle ligne dans la table `utilisateur`.
     """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
@@ -65,14 +74,19 @@ def creer_utilisateur(
 # ----connexion d'un utilisateur avec utilisation d'un get-email pour vérifier si cet utilisateur existe et s'il a ce password----#
 def connecter_utilisateur(email: str, password: str) -> bool:
     """
-    Permet de connecter un utilisateur en vérifiant ses identifiants (email et mot de passe).
+    Authentifie un utilisateur via son email et son mot de passe.
 
-    Paramètres:
-    email (str): L'email de l'utilisateur.
-    password (str): Le mot de passe de l'utilisateur.
+    Args:
+        email (str): Email de l'utilisateur.
+        password (str): Mot de passe de l'utilisateur.
 
-    Affiche un message de succès ou d'erreur via Streamlit. Si les identifiants sont valides,
-    l'utilisateur est enregistré dans la session.
+    Returns:
+        bool: True si la connexion est réussie, False sinon.
+
+    Effets de bord:
+        Enregistre l'utilisateur dans la session Streamlit en cas de succès.
+        Affiche un message d'erreur ou de succès via Streamlit.
+        Sauvegarde l'utilisateur dans un fichier JSON.
     """
     utilisateur: Utilisateur = get_utilisateur_by_email(email)
     if utilisateur and utilisateur.password == password:
@@ -87,14 +101,13 @@ def connecter_utilisateur(email: str, password: str) -> bool:
 
 def get_utilisateur_by_email(email: str) -> Utilisateur | None:
     """
-    Récupère un utilisateur dans la base de données à partir de son email.
+    Récupère un utilisateur à partir de son email depuis la base de données.
 
-    Paramètres:
-    email (str): L'email de l'utilisateur à rechercher.
+    Args:
+        email (str): Email de l'utilisateur recherché.
 
-    Retourne:
-    tuple: Un tuple contenant les informations de l'utilisateur si l'email est trouvé,
-           ou None si aucun utilisateur n'est trouvé avec cet email.
+    Returns:
+        Utilisateur | None: Instance Utilisateur si trouvé, sinon None.
     """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
@@ -135,6 +148,18 @@ def get_utilisateur_by_email(email: str) -> Utilisateur | None:
 
 # -----Récupérer les adresses d'un utilisateur-----#
 def get_adresses_utilisateur(id: int) -> list[Adresse]:
+    """
+    Récupère toutes les adresses actives associées à un utilisateur donné.
+
+    Args:
+        id (int): Identifiant de l'utilisateur.
+
+    Returns:
+        list[Adresse]: Liste d'objets Adresse.
+
+    Raises:
+        Exception: Si aucune adresse n'est trouvée.
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute("SELECT * FROM adresse WHERE id_utilisateur = :id and active = :active", {"id": id, "active": 1})
@@ -183,6 +208,26 @@ def creer_adresse(
     active: int,
     id_utilisateur: int,
 ) -> bool:
+    """
+    Insère une nouvelle adresse dans la base de données.
+
+    Args:
+        numero (str): Numéro de rue.
+        type_voie (str): Type de voie (rue, avenue...).
+        nom_voie (str): Nom de la voie.
+        code_postal (str): Code postal.
+        ville (str): Ville.
+        pays (str): Pays.
+        defaut (int): Indicateur si adresse par défaut (1 = oui, 0 = non).
+        active (int): Indicateur si adresse active (1 = oui, 0 = non).
+        id_utilisateur (int): Identifiant de l'utilisateur propriétaire.
+
+    Returns:
+        bool: True si l'insertion a réussi.
+
+    Effets de bord:
+        Affiche un message de succès via Streamlit.
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute(
@@ -208,6 +253,18 @@ def creer_adresse(
 
 # -----Modifier adresse-----#
 def modifier_adresse_utilisateur(nouvelle_adresse: Adresse) -> None:
+    """
+    Met à jour une adresse existante dans la base de données.
+
+    Args:
+        nouvelle_adresse (Adresse): Objet Adresse contenant les nouvelles données.
+
+    Returns:
+        None
+
+    Effets de bord:
+        Met à jour la ligne correspondante dans la table `adresse`.
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute(
@@ -228,6 +285,21 @@ def modifier_adresse_utilisateur(nouvelle_adresse: Adresse) -> None:
 
 # -----Supprimer adresse-----#
 def supprimer_adresse_utilisateur(id_adresse:int, utilisateur:Utilisateur) -> bool:
+    """
+    Désactive une adresse (active = 0, defaut = 0) dans la base de données.
+
+    Args:
+        id_adresse (int): Identifiant de l'adresse à désactiver.
+        utilisateur (Utilisateur): Utilisateur propriétaire de l'adresse.
+
+    Returns:
+        bool: True si la suppression (désactivation) a réussi.
+
+    Effets de bord:
+        Met à jour la base.
+        Sauvegarde la session utilisateur dans un fichier JSON.
+        Affiche un message de succès via Streamlit.
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute(
@@ -246,6 +318,20 @@ def supprimer_adresse_utilisateur(id_adresse:int, utilisateur:Utilisateur) -> bo
 
 # -----modification de l'utilisateur-----#
 def modifier_utilisateur(nouvel_utilisateur: Utilisateur) -> bool:
+    """
+    Met à jour les informations d'un utilisateur dans la base de données.
+
+    Args:
+        nouvel_utilisateur (Utilisateur): Objet Utilisateur avec les nouvelles données.
+
+    Returns:
+        bool: True si la modification a réussi.
+
+    Effets de bord:
+        Met à jour la ligne correspondante dans la table `utilisateur`.
+        Sauvegarde la session utilisateur dans un fichier JSON.
+        Affiche un message de succès via Streamlit.
+    """
     with sqlite3.connect("bikeworld.db") as conn:
         cur = conn.cursor()
         cur.execute(
@@ -266,6 +352,15 @@ def modifier_utilisateur(nouvel_utilisateur: Utilisateur) -> bool:
 
 # -----déconnexion de l'utilisateur-----#
 def deconnecter_utilisateur() -> str:
+    """
+    Déconnecte l'utilisateur courant de la session Streamlit.
+
+    Returns:
+        str: Prénom de l'utilisateur déconnecté.
+
+    Effets de bord:
+        Supprime la session utilisateur en mémoire et supprime le fichier JSON de session s'il existe.
+    """
     if (
         "utilisateur" in st.session_state
         and st.session_state["utilisateur"] is not None
@@ -279,6 +374,19 @@ def deconnecter_utilisateur() -> str:
 
 # -----sauvegarde de l'utilisateur connecté dans un json-----#
 def sauvegarder_json_utilisateur(utilisateur: Utilisateur) -> None:
+    """
+    Sauvegarde les données de l'utilisateur connecté dans un fichier JSON.
+
+    Args:
+        utilisateur (Utilisateur): Utilisateur à sauvegarder.
+
+    Returns:
+        None
+
+    Effets de bord:
+        Crée ou écrase le fichier 'db/utilisateur_session.json'.
+        Affiche un message d'erreur via Streamlit en cas de problème d'écriture.
+    """
     try:
         with open("db/utilisateur_session.json", "w") as f:
             json.dump(utilisateur.to_dict(), f)
@@ -288,6 +396,15 @@ def sauvegarder_json_utilisateur(utilisateur: Utilisateur) -> None:
 
 # -----supprimer le json utilisateur qui sert à session-----#
 def supprimer_json_utilisateur() -> None:
+    """
+    Supprime le fichier JSON contenant la session utilisateur.
+
+    Returns:
+        None
+
+    Effets de bord:
+        Supprime le fichier 'db/utilisateur_session.json' s'il existe.
+    """
     os.remove("db/utilisateur_session.json")
 
 
