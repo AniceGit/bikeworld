@@ -1,6 +1,7 @@
 import streamlit as st
 from pages.sidebar import afficher_sidebar
 from controllers.produit_controller import get_details_produit
+from models.produit import afficher_image_stock
 from src.tools.session import init_session
 import base64
 
@@ -10,6 +11,12 @@ id = st.session_state["produit"].id
 produit = get_details_produit(id)
 
 def set_bg_image(image_file: str) -> None:
+    """
+    Définit une image de fond pour l'application Streamlit.
+
+    Args:
+        image_file (str): Chemin vers le fichier image à utiliser comme fond d'écran.
+    """
     with open(image_file, "rb") as image:
         encoded_string = base64.b64encode(image.read()).decode()
     st.markdown(
@@ -38,15 +45,6 @@ image_file = "images/fond_detail.jpg"  # Remplacez par le chemin de votre image
 
 # Appliquer le fond d'écran
 set_bg_image(image_file)
-
-# Fonction pour afficher l'image de stock
-def afficher_image_stock(stock):
-    if stock >= 3:
-        return f"🟢  En stock : {produit.stock} disponibles"
-    elif stock == 0:
-        return f"🔴  Produit victime de son succès"
-    else:
-        return f"🟠   Bientôt en rupture de stock"
 
 st.title(produit.nom)
 
@@ -87,7 +85,7 @@ with col1:
         if st.button("Ajouter au panier", key=produit.id):
             panier = st.session_state.panier
             if panier:
-                for produit_quantite in panier["liste_produits_quantite"]:
+                for produit_quantite in panier.liste_produits_quantite:
                     p_id = produit_quantite["produit_id"]
 
                     if p_id == produit.id:
@@ -98,8 +96,8 @@ with col1:
                             break
                         else:
                             produit_quantite["quantite"] += 1
-                            panier["total_panier"] += produit.prix
-                            panier["total_panier"] = round(panier["total_panier"], 2)
+                            panier.total_panier += produit.prix
+                            paniertotal_panier = round(panier.total_panier, 2)
                             produit_quantite["total"] = (
                                 produit.prix * produit_quantite["quantite"]
                             )
@@ -114,9 +112,9 @@ with col1:
                     if produit.stock == 0:
                         st.error(f"Stock insuffisant pour le produit {produit.nom} !")
                     else:
-                        panier["total_panier"] += produit.prix
-                        panier["total_panier"] = round(panier["total_panier"], 2)
-                        panier["liste_produits_quantite"].append(
+                        panier.total_panier += produit.prix
+                        panier.total_panier = round(panier.total_panier, 2)
+                        panier.liste_produits_quantite.append(
                             {
                                 "produit_id": produit.id,
                                 "produit": produit.nom,

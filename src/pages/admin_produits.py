@@ -8,20 +8,23 @@ from src.tools.session import init_session
 from src.controllers.commande_controller import get_adresse_commande, get_commandes, modifier_etat_commande, supprimer_commande
 
 
-
+# Initialisation de la session
 init_session()
+
+# si l'utilisateur n'est pas connecté, il est redirigé vers la page de connexion
 if not st.session_state["utilisateur"]:
     st.switch_page("pages/connexion.py")
 
-
+# si l'utilisateur n'est pas "admin", il est redirigé vers la page d'accueil
 if not st.session_state['utilisateur'].is_admin():
     st.switch_page("accueil.py")
 
+# affichage de la sidebar
 afficher_sidebar()
 
 st.title("Bienvenue sur la page d'administration des produits !")
 
-
+# Récupération de tous les produits de la base
 produits = get_produits()
 
 
@@ -31,8 +34,8 @@ else:
 
     data = []
 
+    # Création du dataframe pandas
     for produit in produits:
-
         data.append(
             {
                 "ID": produit.id,
@@ -50,7 +53,7 @@ else:
 
     df = pd.DataFrame(data)
 
-
+    # Création du dataframe streamlit
     st.dataframe(
         df,
         column_config={
@@ -59,11 +62,12 @@ else:
         hide_index=True,
     )
 
-
+    # Selection du produit à "gérer" dans la partie basse
     produits_ids = [produit.id for produit in produits]
     selected_id = st.selectbox("Sélectionner un produit :", produits_ids)
 
     if selected_id:
+        # Affichage des champs pour modification du produit sélectionné
         produit = next((p for p in produits if p.id == selected_id), None)
         id = produit.id
         nom = st.text_input(label="Nom", value=produit.nom)
