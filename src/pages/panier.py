@@ -6,21 +6,26 @@ from src.controllers.commande_controller import transformer_panier
 from src.models.panier import Panier
 import time, datetime
 
-
+# Initialisation de la session
 init_session()
+
+# Affichage de la sidebar
 afficher_sidebar()
 st.title("Mon Panier")
 
 
 panier = st.session_state.panier
+# Recalcul du total du panier
 panier.total_panier = panier.recalculer_total_panier()
 
 if panier.total_panier == 0.00:
     st.write("Votre panier est vide")
 else:
+    # Recalcul des frais de livraison
     panier.frais_livraison = panier.get_frais_livraison()
     st.write(f"Date: {panier.date_panier}")
 
+    # Création du dataframe pandas de l'entete du panier
     df_total = pd.DataFrame(
         [
             {
@@ -30,6 +35,7 @@ else:
         ]
     )
 
+    # Création du dataframe pandas des lignes du panier
     df = pd.DataFrame(
         [
             {
@@ -42,6 +48,7 @@ else:
         ]
     )
 
+    # Création du dataframe streamlit de l'entete du panier pour formattage
     st.dataframe(
         df,
         column_config={
@@ -51,6 +58,7 @@ else:
         hide_index=True,
     )
 
+    # Création du dataframe streamlit des lignes du panier pour formattage
     st.dataframe(
         df_total,
         column_config={
@@ -60,6 +68,7 @@ else:
         hide_index=True,
     )
 
+    # Sélection d'une ligne du panier pour suppression
     ligne_panier = [produit_quantite["produit"] for produit_quantite in panier.liste_produits_quantite]
     selected_id = st.selectbox("Sélectionner un produit à supprimer :", ligne_panier)
 
@@ -70,8 +79,6 @@ else:
         liste_panier = panier.liste_produits_quantite
         liste_panier.remove(ligne_panier)
 
-
-
         panier.total_panier = panier.recalculer_total_panier()
         panier.frais_livraison = panier.get_frais_livraison()
 
@@ -80,6 +87,7 @@ else:
         st.switch_page("pages/panier.py")
 
 
+    # Transformation du panier en commande
     if st.button("Passer la commande"):
         if not st.session_state["utilisateur"]:
             st.switch_page("pages/connexion.py")
