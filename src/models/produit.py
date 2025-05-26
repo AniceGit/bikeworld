@@ -36,3 +36,22 @@ class Produit:
         self.stock = stock
         self.ventes = ventes
         self.actif = actif
+
+# Fonction pour afficher l'image de stock
+def afficher_image_stock(stock):
+    """
+    Affiche une image et un message en fonction du niveau de stock.
+
+    Args:
+        stock (int): Niveau de stock du produit.
+
+    Returns:
+        str: Message et emoji indiquant le niveau de stock.
+    """
+    
+    if stock >= 3:
+        return f"🟢  En stock : {stock} disponibles"
+    elif stock == 0:
+        return f"🔴  Produit victime de son succès"
+    else:
+        return f"🟠   Bientôt en rupture de stock"

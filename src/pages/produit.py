@@ -1,6 +1,7 @@
 import streamlit as st
 from pages.sidebar import afficher_sidebar
 from controllers.produit_controller import get_details_produit
+from models.produit import afficher_image_stock
 from src.tools.session import init_session
 import base64
 
@@ -10,6 +11,12 @@ id = st.session_state["produit"].id
 produit = get_details_produit(id)
 
 def set_bg_image(image_file: str) -> None:
+    """
+    Définit une image de fond pour l'application Streamlit.
+
+    Args:
+        image_file (str): Chemin vers le fichier image à utiliser comme fond d'écran.
+    """
     with open(image_file, "rb") as image:
         encoded_string = base64.b64encode(image.read()).decode()
     st.markdown(
@@ -38,15 +45,6 @@ image_file = "images/fond_detail.jpg"  # Remplacez par le chemin de votre image
 
 # Appliquer le fond d'écran
 set_bg_image(image_file)
-
-# Fonction pour afficher l'image de stock
-def afficher_image_stock(stock):
-    if stock >= 3:
-        return f"🟢  En stock : {produit.stock} disponibles"
-    elif stock == 0:
-        return f"🔴  Produit victime de son succès"
-    else:
-        return f"🟠   Bientôt en rupture de stock"
 
 st.title(produit.nom)
 

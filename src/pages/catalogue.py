@@ -1,7 +1,7 @@
 import streamlit as st
 from pages.sidebar import afficher_sidebar
 from controllers.produit_controller import get_produits
-from models.produit import Produit
+from models.produit import Produit, afficher_image_stock
 import base64
 from src.tools.session import init_session
 
@@ -14,6 +14,12 @@ st.markdown(
 )
 
 def set_bg_image(image_file: str) -> None:
+    """
+    Définit une image de fond pour l'application Streamlit.
+
+    Args:
+        image_file (str): Chemin vers le fichier image à utiliser comme fond d'écran.
+    """
     with open(image_file, "rb") as image:
         encoded_string = base64.b64encode(image.read()).decode()
     st.markdown(
@@ -49,24 +55,11 @@ liste_produits: list[Produit] = get_produits()
 nb_colonnes = 4
 colonnes = st.columns(nb_colonnes)
 
-# Fonction pour afficher l'image de stock
-def afficher_image_stock(stock):
-    if stock >= 3:
-        return f"🟢  En stock : {produit.stock} disponibles"
-    elif stock == 0:
-        return f"🔴  Produit victime de son succès"
-    else:
-        return f"🟠   Bientôt en rupture de stock"
-    
-
-
 # Parcourir les produits et les afficher dans la grille
 for i, produit in enumerate(liste_produits):
         column_index = i % nb_colonnes
         with colonnes[column_index]:
             if produit.image:
-                
-
                 # colonnes pour aligner le nom et le bouton
                 nom_col, button_col = st.columns([3, 1])
                 with nom_col:
