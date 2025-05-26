@@ -1,36 +1,42 @@
+import time
 import streamlit as st
 import pandas as pd
-import time
-from src.tools.session import init_session
+from controllers.produit_controller import get_produit_nom_by_id
+from controllers.utilisateur_controller import get_utilisateur_by_id
 from pages.sidebar import afficher_sidebar
-from src.controllers.commande_controller import (
-    supprimer_commande,
-    get_commandes_by_utilisateur,
-    get_adresse_commande,
-)
-from src.controllers.produit_controller import get_produit_nom_by_id
+from src.tools.session import init_session
+from src.controllers.commande_controller import get_adresse_commande, get_commandes, modifier_etat_commande, supprimer_commande
 
 
 init_session()
 if not st.session_state["utilisateur"]:
     st.switch_page("pages/connexion.py")
 
-afficher_sidebar()
-st.title("Vos commandes")
 
-commandes = get_commandes_by_utilisateur(st.session_state["utilisateur"].id)
+if not st.session_state['utilisateur'].is_admin():
+    st.switch_page("accueil.py")
+
+afficher_sidebar()
+
+st.title("Bienvenue sur la page d'administration des commandes !")
+
+
+commandes = get_commandes()
+
 
 if not commandes:
-    st.write("Vous n'avez passé aucune commande !")
+    st.write("Aucune commande !")
 else:
 
     data = []
 
     for cmd in commandes:
 
+        utilisateur = get_utilisateur_by_id(cmd.id_utilisateur)
         data.append(
             {
                 "ID": cmd.id,
+                "Client": f"{utilisateur.prenom} {utilisateur.nom}",
                 "Date": cmd.date_commande,
                 "Frais de livraison (€)": f"{cmd.frais_livraison:.2f}",
                 "Total (€)": f"{cmd.prix_total:.2f}",
@@ -74,7 +80,6 @@ else:
                 ]
             )
 
-            #        st.table(ligne_df)
             st.dataframe(
                 ligne_df,
                 column_config={
@@ -85,9 +90,24 @@ else:
             )
 
             if cmd.etat == "Validee":
-                if st.button(f"🗑️ Supprimer la commande {cmd.id}", key=f"delete_{cmd.id}"):
+                if st.button(f"🗑️ Supprimer la commande {cmd.id}", key=f"supprimer_{cmd.id}"):
                     supprimer_commande(cmd.id)
                     with st.spinner(text="Veuillez patienter", show_time=False):
                         st.success(f"Commande {cmd.id} supprimée.")
                         time.sleep(2)
-                    st.switch_page("pages/commandes.py")
+                    st.switch_page("pages/admin_commandes.py")
+
+                if st.button(f"📑 Passer en préparation {cmd.id}", key=f"preparer_{cmd.id}"):
+                    modifier_etat_commande(cmd.id, "En preparation")
+                    with st.spinner(text="Veuillez patienter", show_time=False):
+                        st.success(f"Commande {cmd.id} en cours de préparation.")
+                        time.sleep(.2)
+                    st.switch_page("pages/admin_commandes.py")
+
+            if cmd.etat == "En preparation":
+                if st.button(f"📦 Expédier la commande {cmd.id}", key=f"expedier{cmd.id}"):
+                    modifier_etat_commande(cmd.id, "Expediee")
+                    with st.spinner(text="Veuillez patienter", show_time=False):
+                        st.success(f"Commande {cmd.id} expédiée.")
+                        time.sleep(.2)
+                    st.switch_page("pages/admin_commandes.py")

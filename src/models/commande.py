@@ -1,16 +1,16 @@
-from src.models.produit_commande import ProduitCommande
-
 class Commande:
 
-    def __init__(self, id: int,
-                 date_commande: str,
-                 etat: str,
-                 prix_total: float,
-                 frais_livraison: float,
-                 id_utilisateur: int,
-                 id_adresse: int
+    def __init__(
+        self,
+        id: int,
+        date_commande: str,
+        etat: str,
+        prix_total: float,
+        frais_livraison: float,
+        id_utilisateur: int,
+        id_adresse: int,
     ) -> None:
-        """ Instanciation d'une Commande
+        """Instanciation d'une Commande
 
         Args:
             id (int): identifiant de la commande (pk)

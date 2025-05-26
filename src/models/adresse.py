@@ -33,8 +33,8 @@ class Adresse:
         self.pays = pays
         self.defaut = defaut
         self.id_utilisateur = id_utilisateur
-    
-    def to_dict(self):
+
+    def to_dict(self) -> dict:
         return {
             "id": self.id,
             "numero": self.numero,
@@ -44,13 +44,15 @@ class Adresse:
             "ville": self.ville,
             "pays": self.pays,
             "defaut": self.defaut,
-            "id_utilisateur": self.id_utilisateur
+            "id_utilisateur": self.id_utilisateur,
         }
+
     def __str__(self) -> str:
         adresse_to_str = f"{self.numero} {self.type_voie} {self.nom_voie} - {self.code_postal} {self.ville} - {self.pays}"
         return adresse_to_str
 
-def adresse_from_dict(data):
+
+def adresse_from_dict(data: dict) -> Adresse:
     return Adresse(
         id=data["id"],
         numero=data["numero"],
@@ -60,5 +62,5 @@ def adresse_from_dict(data):
         ville=data["ville"],
         pays=data["pays"],
         defaut=data["defaut"],
-        id_utilisateur=data["id_utilisateur"]
+        id_utilisateur=data["id_utilisateur"],
     )
