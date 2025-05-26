@@ -1,11 +1,20 @@
 import streamlit as st
 from controllers.produit_controller import get_top_3_ventes
-from models.produit import Produit
+from models.produit import Produit, afficher_image_stock
 from src.tools.session import init_session
 
 init_session()
 
 def afficher_produits_stars() -> None:
+    """
+    Affiche les trois produits les plus vendus dans une interface Streamlit.
+
+    Cette fonction récupère les trois produits les plus vendus et les affiche
+    dans une grille de colonnes avec des médailles pour indiquer leur rang.
+    Chaque produit est affiché avec son image, son nom, son prix, et un bouton
+    pour voir les détails du produit.
+    """
+    
     st.markdown("#")
     st.markdown(
     "<h2 style='text-align: center; color: #f1ab00; background-color: #000000;'>Top Ventes</h2>",
@@ -16,31 +25,24 @@ def afficher_produits_stars() -> None:
     nb_colonnes = 3
     colonnes = st.columns(nb_colonnes)
 
-    # Fonction pour afficher l'image de stock
-    def afficher_image_stock(stock):
-        if stock >= 3:
-            return f"🟢  En stock : {produit.stock} disponibles"
-        elif stock == 0:
-            return f"🔴  Produit victime de son succès"
-        else:
-            return f"🟠   Bientôt en rupture de stock"
-        # Fonction pour afficher l'image de stock
-       
-
-        # Parcourir les produits et le top 3 des ventes
+         # Parcourir les produits et le top 3 des ventes
     for i, produit in enumerate(liste_top_ventes):
         column_index = i % nb_colonnes
-    
- 
         with colonnes[column_index]:
             if produit.image:
                 # colonnes pour aligner le nom et le bouton
                 nom_col, button_col = st.columns([3, 1])
                 with nom_col:
+                    medaille = ""
+                    if i == 0:
+                        medaille = "🥇"
+                    elif i == 1:
+                        medaille ="🥈"
+                    else: medaille = "🥉"
                     st.markdown(
                     f"""
                     <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
-                        <p style='font-size: 19px; font-weight: bold; color: #f1ab00; margin: 0;'>{produit.nom}</p>
+                        <p style='font-size: 19px; font-weight: bold; color: #f1ab00; margin: 0;'>{medaille} {produit.nom}</p>
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -71,75 +73,3 @@ def afficher_produits_stars() -> None:
                 st.markdown("#")
             else:
                 st.write("Aucune image disponible")
-
-    # Organiser les produits en forme de pyramide
-    # Afficher "Top Ventes" au milieu
-
-    # Produit le plus vendu en haut
-
-
-#     if len(liste_top_ventes) >= 1:
-#         produit_top = liste_top_ventes[0]
-#         col1, col2, col3 = st.columns([1, 2, 1])
-#         with col2:
-#             if produit_top.image:
-#                 st.image(produit_top.image, width=200)  # Utilisation d'une largeur fixe
-#                 st.markdown(
-#                     f"""
-#                     <div style='background-color: #494341; padding: 4px; border-radius: 5px;'>
-#                         <p style='font-size: 24px; font-weight: bold; margin: 0;'>{produit_top.nom}</p>
-#                     </div>
-#                     """,
-#                     unsafe_allow_html=True
-#                 )
-#                 prix_col, button_col = st.columns([1, 1])
-#                 with button_col:
-#                     if st.button("Détail", key=produit_top.id):
-#                         st.session_state["produit"] = produit_top
-#                         st.switch_page("pages/produit.py")
-#             else:
-#                 st.write("Aucune image disponible")
-
-#     # Deuxième et troisième produits en dessous
-#     if len(liste_top_ventes) >= 3:
-#         col1, col2 = st.columns(2)
-#         with col1:
-#             produit_2 = liste_top_ventes[1]
-#             if produit_2.image:
-#                 st.image(produit_2.image, width=200)
-#                 st.markdown(
-#                     f"""
-#                     <div style='background-color: #494341; padding: 4px; border-radius: 5px;'>
-#                         <p style='font-size: 24px; font-weight: bold; margin: 0;'>{produit_2.nom}</p>
-#                     </div>
-#                     """,
-#                     unsafe_allow_html=True
-#                 )
-#                 prix_col, button_col = st.columns([1, 1])
-#                 with button_col:
-#                     if st.button("Détail", key=produit_2.id):
-#                         st.session_state["produit"] = produit_2
-#                         st.switch_page("pages/produit.py")
-#             else:
-#                 st.write("Aucune image disponible")
-
-#         with col2:
-#             produit_3 = liste_top_ventes[2]
-#             if produit_3.image:
-#                 st.image(produit_3.image, width=200)
-#                 st.markdown(
-#                     f"""
-#                     <div style='background-color: #494341; padding: 4px; border-radius: 5px;'>
-#                         <p style='font-size: 24px; font-weight: bold; margin: 0;'>{produit_3.nom}</p>
-#                     </div>
-#                     """,
-#                     unsafe_allow_html=True
-#                 )
-#                 prix_col, button_col = st.columns([1, 1])
-#                 with button_col:
-#                     if st.button("Détail", key=produit_3.id):
-#                         st.session_state["produit"] = produit_3
-#                         st.switch_page("pages/produit.py")
-#             else:
-#                 st.write("Aucune image disponible")
-# afficher_produits_stars()
