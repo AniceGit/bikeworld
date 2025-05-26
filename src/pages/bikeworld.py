@@ -8,8 +8,9 @@ init_session()
 def afficher_produits_stars() -> None:
     st.markdown("#")
     st.markdown(
-        "<h2 style='text-align: center;'>Top Ventes</h2>", unsafe_allow_html=True
-    )
+    "<h2 style='text-align: center; color: #ff7000; background-color: #000000;'>Top Ventes</h2>",
+    unsafe_allow_html=True
+)
 
     liste_top_ventes: list[Produit] = get_top_3_ventes()
 
@@ -19,6 +20,7 @@ def afficher_produits_stars() -> None:
     # Parcourir les produits et le top 3 des ventes
     for i, produit in enumerate(liste_top_ventes):
         column_index = i % nb_colonnes
+    
  
         with colonnes[column_index]:
             if produit.image:
@@ -30,7 +32,7 @@ def afficher_produits_stars() -> None:
                     st.markdown(
                         f"""
                         <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
-                            <p style='font-size: 20px; font-weight: bold; margin: 0;'>{produit.nom}</p>
+                            <p style='font-size: 20px; font-weight: bold; color: #ff7000; margin: 0;'>{produit.nom}</p>
                         </div>
                         """,
                         unsafe_allow_html=True
