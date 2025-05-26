@@ -275,11 +275,11 @@ def transformer_panier() -> None:
                     :id_adresse)
         """,
             {
-                "date_commande": panier["date_panier"],
+                "date_commande": panier.date_panier,
                 "etat": "Validee",
-                "prix_total": panier["total_panier"],
+                "prix_total": panier.total_panier,
                 "frais_livraison": (
-                    panier["frais_livraison"] if panier["total_panier"] < 1500 else 0.00
+                    panier.frais_livraison if panier.total_panier < 1500 else 0.00
                 ),
                 "id_utilisateur": user.id,
                 "id_adresse": user.adresse.id
@@ -290,7 +290,7 @@ def transformer_panier() -> None:
         cmd_id = cur.lastrowid
 
         # Insertion des lignes de commande
-        for ligne in panier["liste_produits_quantite"]:
+        for ligne in panier.liste_produits_quantite:
 
             cur.execute(
                 """

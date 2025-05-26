@@ -3,6 +3,7 @@ import pandas as pd
 from pages.sidebar import afficher_sidebar
 from src.tools.session import init_session
 from src.controllers.commande_controller import transformer_panier
+from src.models.panier import Panier
 import time, datetime
 
 
@@ -12,21 +13,19 @@ st.title("Mon Panier")
 
 
 panier = st.session_state.panier
+panier.total_panier = panier.recalculer_total_panier()
 
-
-if panier["total_panier"] == 0.00:
+if panier.total_panier == 0.00:
     st.write("Votre panier est vide")
 else:
-    if panier["total_panier"] >= 1500.00:
-        panier["frais_livraison"] = 0.00
-
-    st.write(f"Date: {panier['date_panier']}")
+    panier.frais_livraison = panier.get_frais_livraison()
+    st.write(f"Date: {panier.date_panier}")
 
     df_total = pd.DataFrame(
         [
             {
-                "Frais de livraison (€)": f"{panier['frais_livraison']:.2f}",
-                "Total du panier (€)": f"{panier['total_panier']+panier['frais_livraison']:.2f}",
+                "Frais de livraison (€)": f"{panier.frais_livraison:.2f}",
+                "Total du panier (€)": f"{panier.total_panier + panier.frais_livraison:.2f}",
             }
         ]
     )
@@ -39,7 +38,7 @@ else:
                 "Prix unitaire (€)": f"{produit_quantite['prix']:.2f}",
                 "Total (€)": f"{produit_quantite['total']:.2f}",
             }
-            for produit_quantite in panier["liste_produits_quantite"]
+            for produit_quantite in panier.liste_produits_quantite
         ]
     )
 
@@ -61,23 +60,23 @@ else:
         hide_index=True,
     )
 
-    ligne_panier = [produit_quantite["produit"] for produit_quantite in panier["liste_produits_quantite"]]
+    ligne_panier = [produit_quantite["produit"] for produit_quantite in panier.liste_produits_quantite]
     selected_id = st.selectbox("Sélectionner un produit à supprimer :", ligne_panier)
 
     if selected_id:
-        ligne_panier = next((produit_quantite for produit_quantite in panier["liste_produits_quantite"] if produit_quantite["produit"] == selected_id), None)
+        ligne_panier = next((produit_quantite for produit_quantite in panier.liste_produits_quantite if produit_quantite["produit"] == selected_id), None)
 
     if st.button("Supprimer du panier"):
-        liste_panier = panier['liste_produits_quantite']
+        liste_panier = panier.liste_produits_quantite
         liste_panier.remove(ligne_panier)
 
         total_panier = 0
-        for item in panier["liste_produits_quantite"]:
+        for item in panier.liste_produits_quantite:
             total_panier += item["quantite"] * item["prix"]
         if total_panier < 1500:
-            panier['frais_livraison'] = 25
+            panier.frais_livraison = 25.0
 
-        panier['total_panier'] = total_panier
+        panier.total_panier = total_panier
 
         with st.spinner(text="Veuillez patienter", show_time=False):
             time.sleep(2)
@@ -90,12 +89,7 @@ else:
         else:
             transformer_panier()
 
-            st.session_state.panier = {
-                "date_panier": str(datetime.date.today()),
-                "total_panier": 0.0,
-                "frais_livraison": 20.0,
-                "liste_produits_quantite": [],
-            }
+            st.session_state.panier = Panier(str(datetime.date.today()), 0.0)
 
             with st.spinner(text="Veuillez patienter", show_time=False):
                 time.sleep(2)

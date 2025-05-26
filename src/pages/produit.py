@@ -44,7 +44,7 @@ with col1:
         if st.button("Ajouter au panier", key=produit.id):
             panier = st.session_state.panier
             if panier:
-                for produit_quantite in panier["liste_produits_quantite"]:
+                for produit_quantite in panier.liste_produits_quantite:
                     p_id = produit_quantite["produit_id"]
 
                     if p_id == produit.id:
@@ -55,8 +55,8 @@ with col1:
                             break
                         else:
                             produit_quantite["quantite"] += 1
-                            panier["total_panier"] += produit.prix
-                            panier["total_panier"] = round(panier["total_panier"], 2)
+                            panier.total_panier += produit.prix
+                            paniertotal_panier = round(panier.total_panier, 2)
                             produit_quantite["total"] = (
                                 produit.prix * produit_quantite["quantite"]
                             )
@@ -71,9 +71,9 @@ with col1:
                     if produit.stock == 0:
                         st.error(f"Stock insuffisant pour le produit {produit.nom} !")
                     else:
-                        panier["total_panier"] += produit.prix
-                        panier["total_panier"] = round(panier["total_panier"], 2)
-                        panier["liste_produits_quantite"].append(
+                        panier.total_panier += produit.prix
+                        panier.total_panier = round(panier.total_panier, 2)
+                        panier.liste_produits_quantite.append(
                             {
                                 "produit_id": produit.id,
                                 "produit": produit.nom,
