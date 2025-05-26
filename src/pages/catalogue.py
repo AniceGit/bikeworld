@@ -9,7 +9,7 @@ init_session()
 
 afficher_sidebar()
 st.markdown(
-    "<h2 style='text-align: center; color: #f1ab00; background-color: #000000;'>Bienvenue sur la page des produits de BIKEWORLD!</h2>",
+    "<h2 style='text-align: center; color: #f1ab00; background-color: #191919;'>Bienvenue sur la page des produits de BIKEWORLD!</h2>",
     unsafe_allow_html=True
 )
 
@@ -65,7 +65,7 @@ for i, produit in enumerate(liste_produits):
                 with nom_col:
                     st.markdown(
                     f"""
-                    <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                    <div style='background-color: #191919; padding: 4px; border-radius: 5px;'>
                         <p style='font-size: 19px; font-weight: bold; color: #f1ab00; margin: 0;'>{produit.nom}</p>
                     </div>
                     """,
@@ -75,7 +75,7 @@ for i, produit in enumerate(liste_produits):
                 #with nom_col:
                 st.markdown(
                         f"""
-                            <div style='background-color: #141312; padding: 1px; border-radius: 5px;'>
+                            <div style='background-color: #191919; padding: 1px; border-radius: 5px;'>
                                 <p style='font-size: 23px; margin: 0'>Prix: {produit.prix:.2f} €</p>
                             </div>
                             """,
@@ -88,7 +88,7 @@ for i, produit in enumerate(liste_produits):
 
                 st.markdown(
                         f"""
-                        <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                        <div style='background-color: #191919; padding: 4px; border-radius: 5px;'>
                             <p style='font-size: 20px; font-weight: bold; color: #f1ab00; margin: 0;'>{afficher_image_stock(produit.stock)}</p>
                         </div>
                         """,

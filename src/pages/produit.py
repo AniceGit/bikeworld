@@ -75,9 +75,9 @@ with col1:
         )
         st.markdown(
                         f"""
-                        <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                        
                             <p style='font-size: 20px; font-weight: bold; color: #f1ab00; margin: 0;'>{afficher_image_stock(produit.stock)}</p>
-                        </div>
+                        
                         """,
                         unsafe_allow_html=True
                     )

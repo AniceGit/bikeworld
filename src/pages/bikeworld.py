@@ -17,7 +17,7 @@ def afficher_produits_stars() -> None:
     
     st.markdown("#")
     st.markdown(
-    "<h2 style='text-align: center; color: #f1ab00; background-color: #000000;'>Top Ventes</h2>",
+    "<h2 style='text-align: center; color: #f1ab00; background-color: #191919;'>Top Ventes</h2>",
     unsafe_allow_html=True)
     st.markdown("#")
     liste_top_ventes: list[Produit] = get_top_3_ventes()
@@ -41,7 +41,7 @@ def afficher_produits_stars() -> None:
                     else: medaille = "🥉"
                     st.markdown(
                     f"""
-                    <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                    <div style='background-color: #191919; padding: 4px; border-radius: 5px;'>
                         <p style='font-size: 19px; font-weight: bold; color: #f1ab00; margin: 0;'>{medaille} {produit.nom}</p>
                     </div>
                     """,
@@ -51,7 +51,7 @@ def afficher_produits_stars() -> None:
                 #with nom_col:
                 st.markdown(
                         f"""
-                            <div style='background-color: #141312; padding: 1px; border-radius: 5px;'>
+                            <div style='background-color: #191919; padding: 1px; border-radius: 5px;'>
                                 <p style='font-size: 23px; margin: 0'>Prix: {produit.prix:.2f} €</p>
                             </div>
                             """,
@@ -64,7 +64,7 @@ def afficher_produits_stars() -> None:
 
                 st.markdown(
                         f"""
-                        <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                        <div style='background-color: #191919; padding: 4px; border-radius: 5px;'>
                             <p style='font-size: 20px; font-weight: bold; color: #f1ab00; margin: 0;'>{afficher_image_stock(produit.stock)}</p>
                         </div>
                         """,
