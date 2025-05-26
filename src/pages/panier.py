@@ -75,7 +75,7 @@ else:
         for item in panier["liste_produits_quantite"]:
             total_panier += item["quantite"] * item["prix"]
         if total_panier < 1500:
-            panier['frais_livraison'] = 25
+            panier['frais_livraison'] = 25.0
 
         panier['total_panier'] = total_panier
 
