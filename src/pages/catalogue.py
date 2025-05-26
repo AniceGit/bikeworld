@@ -14,8 +14,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-
 def set_bg_image(image_file: str) -> None:
     with open(image_file, "rb") as image:
         encoded_string = base64.b64encode(image.read()).decode()
@@ -40,7 +38,6 @@ def set_bg_image(image_file: str) -> None:
         unsafe_allow_html=True,
     )
 
-
 # Chemin vers votre image de fond
 image_file = "images/catalogue_background.jpg"  # Remplacez par le chemin de votre image
 
@@ -53,30 +50,47 @@ liste_produits: list[Produit] = get_produits()
 nb_colonnes = 4
 colonnes = st.columns(nb_colonnes)
 
+# Fonction pour encoder une image en base64
+def encode_image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+    
+# Chemins vers les images de stock
+stock_vide = "images/red-circle.png"
+en_stock = "images/green-circle.png"
+
+# Encoder les images en base64
+stock_vide_encode= encode_image_to_base64(stock_vide)
+en_stock_encode= encode_image_to_base64(en_stock)
+
+# Fonction pour afficher l'image de stock
+def afficher_image_stock(stock):
+    if stock >= 3:
+        return f"<img src='data:image/png;base64,{en_stock_encode}' width='20' height='20'/>   En stock"
+    else:
+        return f"<img src='data:image/png;base64,{stock_vide_encode}' width='20' height='20'/>   Produit victime de son succès"
+
+
 # Parcourir les produits et les afficher dans la grille
 for i, produit in enumerate(liste_produits):
         column_index = i % nb_colonnes
         with colonnes[column_index]:
             if produit.image:
-                st.image(produit.image, use_container_width=True)
+                
 
-                # Utiliser des colonnes pour aligner le nom et le bouton
+                # colonnes pour aligner le nom et le bouton
                 nom_col, button_col = st.columns([3, 1])
                 with nom_col:
                     st.markdown(
-                        f"""
-                        <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
-                            <p style='font-size: 20px; font-weight: bold; color: #ff7000; margin: 0;'>{produit.nom}</p>
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-                with button_col:
-                    if st.button("Détail", key=produit.id):
-                        st.session_state["produit"] = produit
-                        st.switch_page("pages/produit.py")
-
-                # Afficher le prix en dessous
+                    f"""
+                    <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                        <p style='font-size: 19px; font-weight: bold; color: #ff7000; margin: 0;'>{produit.nom}</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+                st.image(produit.image, use_container_width=True)
+                #with nom_col:
                 st.markdown(
                         f"""
                             <div style='background-color: #141312; padding: 1px; border-radius: 5px;'>
@@ -84,6 +98,20 @@ for i, produit in enumerate(liste_produits):
                             </div>
                             """,
                             unsafe_allow_html=True
+                )
+                with button_col:
+                    if st.button("Détail", key=produit.id):
+                        st.session_state["produit"] = produit
+                        st.switch_page("pages/produit.py")
+
+                st.markdown(
+                        f"""
+                        <div style='background-color: #141312; padding: 4px; border-radius: 5px;'>
+                            <p style='font-size: 20px; font-weight: bold; color: #ff7000; margin: 0;'>{afficher_image_stock(produit.stock)}</p>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
                     )
+                st.markdown("#")
             else:
                 st.write("Aucune image disponible")
