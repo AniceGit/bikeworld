@@ -80,7 +80,7 @@ else:
         actif = st.checkbox(label="Actif", value=produit.actif)
 
 
-        if st.button("Modifier"):
+        if st.button("💾 Modifier"):
             actif_n = 1 if actif else 0
             if nom and description and spec_tech and couleur and image and prix and stock:
                 modifier_produit(id, nom, description, spec_tech, couleur, image, prix, stock, actif_n)
