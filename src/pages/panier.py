@@ -70,13 +70,10 @@ else:
         liste_panier = panier.liste_produits_quantite
         liste_panier.remove(ligne_panier)
 
-        total_panier = 0
-        for item in panier.liste_produits_quantite:
-            total_panier += item["quantite"] * item["prix"]
-        if total_panier < 1500:
-            panier.frais_livraison = 25.0
 
-        panier.total_panier = total_panier
+
+        panier.total_panier = panier.recalculer_total_panier()
+        panier.frais_livraison = panier.get_frais_livraison()
 
         with st.spinner(text="Veuillez patienter", show_time=False):
             time.sleep(2)

@@ -152,5 +152,5 @@ Ce projet a été créé dans le cadre de la formation **Data Engineering Bootca
 
 🔗 [Anice Guiren](https://github.com/AniceGit)  
 🔗 [Sébastien Dewaelle](https://github.com/cebdewaelle)  
-🔗 [Stéphane Muller]()
+🔗 [Stéphane Muller](https://github.com/smuller59)
 

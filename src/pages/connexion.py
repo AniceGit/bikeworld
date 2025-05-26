@@ -11,6 +11,20 @@ afficher_sidebar()
 
 
 def set_bg_image(image_file: str) -> None:
+    """
+    Définit une image de fond pour l'application Streamlit.
+
+    Args:
+        image_file (str): Chemin vers le fichier image (.png ou .jpg) à utiliser en fond.
+
+    Returns:
+        None
+
+    Effets de bord:
+        Injecte un style CSS dans la page Streamlit pour appliquer l'image en arrière-plan,
+        avec des styles pour la taille, la position, la répétition et l'attachement du fond.
+        Modifie également la couleur du texte des éléments ciblés pour améliorer la lisibilité.
+    """
     with open(image_file, "rb") as image:
         encoded_string = base64.b64encode(image.read()).decode()
     st.markdown(
@@ -52,6 +66,19 @@ st.markdown(
 
 
 def connexion_vue() -> None:
+    """
+    Affiche la vue de connexion avec formulaire email/mot de passe.
+
+    Permet à l'utilisateur de saisir ses informations et de tenter de se connecter.
+
+    Returns:
+        None
+
+    Effets de bord:
+        Affiche un formulaire avec deux champs (email et mot de passe).
+        Affiche des messages d'erreur si les champs sont vides.
+        Si la connexion réussit, affiche un spinner puis redirige vers la page d'accueil.
+    """
     st.markdown('<p class="custom-write">Connexion</p>', unsafe_allow_html=True)
 
     email = st.text_input("Email")

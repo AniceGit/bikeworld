@@ -218,6 +218,7 @@ def get_adresse_commande(id_adresse: int) -> Adresse | None:
                     ville,
                     pays,
                     defaut,
+                    active,
                     id_utilisateur
                 FROM adresse WHERE id = :id_adresse
             """,
@@ -238,6 +239,7 @@ def get_adresse_commande(id_adresse: int) -> Adresse | None:
             ville,
             pays,
             defaut,
+            active,
             id_utilisateur,
         ) = result
         adresse_commande = Adresse(
@@ -249,6 +251,7 @@ def get_adresse_commande(id_adresse: int) -> Adresse | None:
             ville,
             pays,
             defaut,
+            active,
             id_utilisateur,
         )
 
